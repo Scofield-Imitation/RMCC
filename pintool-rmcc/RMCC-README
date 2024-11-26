@@ -1,0 +1,3 @@
+Compile commands:
+	cd pintool-rmcc/source/tools/ManualExamples
+	make obj-intel64/rmcc.so TARGET=intel64
