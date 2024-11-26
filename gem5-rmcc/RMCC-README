@@ -1,0 +1,2 @@
+Compile:
+CC=gcc-7 CXX=g++-7 python2  $(which scons) PROTOC=False -j20 build/X86/gem5.opt

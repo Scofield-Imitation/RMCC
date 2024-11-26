@@ -1,0 +1,7 @@
+--- .hgignore	Sat May 31 18:00:23 2014 -0700
++++ .hgignore	Thu Mar 10 03:46:14 2016 +0800
+@@ -10,3 +10,4 @@
+ m5out
+ src/doxygen
+ ext/dramsim2/DRAMSim2
++ext/ramulator/Ramulator

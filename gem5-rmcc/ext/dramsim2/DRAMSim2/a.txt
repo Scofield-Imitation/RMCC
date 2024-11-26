@@ -1,0 +1,23 @@
+370:					bankStates[rank][bank].nextActivate = max(currentClockCycle + READ_AUTOPRE_DELAY,
+371:							bankStates[rank][bank].nextActivate);
+408:					//set read and write to nextActivate so the state table will prevent a read or write
+411:					bankStates[rank][bank].nextRead = bankStates[rank][bank].nextActivate;
+412:					bankStates[rank][bank].nextWrite = bankStates[rank][bank].nextActivate;
+421:					bankStates[rank][bank].nextActivate = max(currentClockCycle + WRITE_AUTOPRE_DELAY,
+422:							bankStates[rank][bank].nextActivate);
+498:				//set read and write to nextActivate so the state table will prevent a read or write
+503:					bankStates[rank][bank].nextRead = bankStates[rank][bank].nextActivate;
+504:					bankStates[rank][bank].nextWrite = bankStates[rank][bank].nextActivate;
+556:				bankStates[rank][bank].nextActivate = max(currentClockCycle + tRC, bankStates[rank][bank].nextActivate);
+562:						bankStates[rank][i].nextActivate = max(currentClockCycle + tRRD, bankStates[rank][i].nextActivate);
+571:					bankStates[pair_rank][bank].nextActivate = max(currentClockCycle + tRC, bankStates[pair_rank][bank].nextActivate);
+577:							bankStates[pair_rank][i].nextActivate = max(currentClockCycle + tRRD, bankStates[pair_rank][i].nextActivate);
+597:							bankStates[rank][i].nextActivate = max(currentClockCycle + tRP, bankStates[rank][i].nextActivate);
+602:							bankStates[pair_rank][i].nextActivate = max(currentClockCycle + tRP, bankStates[pair_rank][i].nextActivate);
+618:						bankStates[rank][bank].nextActivate = max(currentClockCycle + tRP_turbo, bankStates[rank][bank].nextActivate);
+625:						bankStates[rank][bank].nextActivate = max(currentClockCycle + tRP, bankStates[rank][bank].nextActivate);
+631:							bankStates[pair_rank][bank].nextActivate = max(currentClockCycle + tRP, bankStates[pair_rank][bank].nextActivate);
+643:					bankStates[rank][bank].nextActivate = max(currentClockCycle + tRP, bankStates[rank][bank].nextActivate);
+649:							bankStates[pair_rank][bank].nextActivate = max(currentClockCycle + tRP, bankStates[pair_rank][bank].nextActivate);
+668:					bankStates[rank][i].nextActivate = currentClockCycle + tRFC;
+930:							bankStates[i][j].nextActivate = currentClockCycle + tXP;

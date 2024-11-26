@@ -1,0 +1,12 @@
+--- configs/common/MemConfig.py	Sat May 31 18:00:23 2014 -0700
++++ configs/common/MemConfig.py	Thu Mar 10 03:46:14 2016 +0800
+@@ -54,7 +54,8 @@
+     ("lpddr2_s4_1066_x32", "LPDDR2_S4_1066_x32"),
+     ("lpddr3_1600_x32", "LPDDR3_1600_x32"),
+     ("wio_200_x128", "WideIO_200_x128"),
+-    ("dramsim2", "DRAMSim2")
++    ("dramsim2", "DRAMSim2"),
++    ("ramulator", "Ramulator"),
+     ]
+ 
+ # Filtered list of aliases. Only aliases for existing memory
