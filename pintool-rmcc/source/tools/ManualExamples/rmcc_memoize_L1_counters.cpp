@@ -55,11 +55,11 @@
 PIN_LOCK pinLock;
 #define max_num_of_threads 16
 #define NUM_OF_THREADS 16
-
-
+int counter_for_relevel_L1_counter=0;
+double possibility_for_updating_L1_while_read=0;
 //#define times_of_16g 5
 #define times_of_16g 8
-int is_final=0;
+
 int num_billion_insts=0;
 double accumulated_data_occupancy=0;
 int during_page_zero=0;
@@ -69,7 +69,7 @@ int debug_counter_increment=0;
 #define access_data 0
 #define access_inst 1
 #define access_page_table 2
-
+#define debug_memoize_l1 0
 #define  debug_zcc_inner_switch  0
 #define debug_relevel_to_next_group 0
 #define debug_part_chain_incrementing 0
@@ -134,7 +134,7 @@ int deviation=0;
 //#define OTP_PRECALCULATION 0
 int deprioritize_tree_nodes_in_metadata_cache=0;
 int insert_metadata_into_LLC=0;
-int access_inst_and_page_table=1;
+int access_inst_and_page_table=0;
 #define page_table_begin_addr (0xF000000000000000)
 UINT64 get_inst_block_address(UINT64 _program_counter){
 	return _program_counter&0xFFFFFFFFFFFFFFC0;
@@ -146,15 +146,17 @@ int use_sampling_for_inserting_metadata_into_LLC=0;
 int use_drrip=0;
 int delay_high_level_tree_node_overflow=0;
 int dccm_block_level_relevel=0;
-int huge_page=1;
+int huge_page=0;
 int during_write=1;
 int is_gap=0;
 int mcr_overflow=0;
-int invalidate_dirty_version_in_metadata_cache=1;
+int invalidate_dirty_version_in_metadata_cache=0;
 int far_relevel=0;
 int use_page_zero=0;
 int generate_tree_nodes=0;
 int OTP_PRECALCULATION=0;
+int OTP_L1_PRECALCULATION=0;
+
 int BEGIN_WITH_BIG_COUNTER=0;
 int flag_variable_detected=0;
 int iteration_of_gap_to_begin_with=2;
@@ -188,7 +190,7 @@ static const INT32 L1_counter_SET_SIZE = 8; // Set size (number of cache lines i
 //static const INT32 L2_SET_NUM = 256;
 //static const INT32 L2_SET_NUM = 8;
 //static const INT32 L2_SET_NUM = 8;
-static const INT32 L2_SET_NUM = 8192;
+static const INT32 L2_SET_NUM = 2048;
 //static const INT32 L2_SET_NUM = 128;
 //xinw modified L2 size to 2MB
 //xinw modified L2 size to 256KB
@@ -211,7 +213,7 @@ static const UINT32 PC_SAMPLING_SIZE = 8;
 // WC cache parameters: total size = 128kB
 //xinw modified the WCCACHE size to 32KB-begin
 //static const INT32 WCCACHE_SET_NUM = 128;
-static const INT32 WCCACHE_SET_NUM = 128;
+static const INT32 WCCACHE_SET_NUM = 16;
 //static const INT32 WCCACHE_SET_NUM = 1;
 //static const INT32 WCCACHE_SET_NUM = 4;
 //static const INT32 WCCACHE_SET_NUM = 2;
@@ -569,12 +571,14 @@ ofstream output_file_otp;
 
 // Pintool KNOB used for command line parameters
 // -o used to specify output file with all stats collected: ex. -o  youroutfile.out 
+KNOB<double> KnobPossibilityForUpdatingL1WhileRead(KNOB_MODE_WRITEONCE, "pintool",
+  "possibility_for_updating_l1_while_read", "0", "specify possibility for updating L1 counter while read");
 KNOB<int> KnobInvalidateDirtyVersionInMetadataCache(KNOB_MODE_WRITEONCE, "pintool",
-  "invalidate_dirty_version_in_metadata_cache", "1", "identify whether to invalidate dirty version metadata cache during data writeback");
+  "invalidate_dirty_version_in_metadata_cache", "0", "identify whether to invalidate dirty version metadata cache during data writeback");
 KNOB<int> KnobDeprioritizeTreeNodesInMetadataCache(KNOB_MODE_WRITEONCE, "pintool",
   "deprioritize_tree_nodes_in_metadata_cache", "0", "identify whether to deprioritize integrity tree nodes in metadata cache");
 KNOB<int> KnobAccessInstAndPageTable(KNOB_MODE_WRITEONCE, "pintool",
-  "access_inst_and_page_table", "1", "identify whether to access inst and page table entry");
+  "access_inst_and_page_table", "0", "identify whether to access inst and page table entry");
 KNOB<int> KnobInsertMetadataIntoLLC(KNOB_MODE_WRITEONCE, "pintool",
   "insert_metadata_into_llc", "0", "identify whether to insert metadata blocks to LLC from private metadata cache");
 KNOB<int> KnobUseSamplingForInsertingMetadataIntoLLC(KNOB_MODE_WRITEONCE, "pintool",
@@ -608,7 +612,7 @@ KNOB<int> KnobAesEpoch(KNOB_MODE_WRITEONCE, "pintool",
 KNOB<int> KnobResetTableStatsPerEpoch(KNOB_MODE_WRITEONCE, "pintool",
   "reset_table_stats_per_epoch", "0", "identify whether it is resetting table stats in the end of each epoch");
 KNOB<double> KnobThresholdForInsertionOfEvictedGroupOverhead(KNOB_MODE_WRITEONCE, "pintool",
-  "threshold_insertion_of_evicted_group", "0.02", "specify threshold for hit rate of evicted group to insert into the table");
+  "threshold_insertion_of_evicted_group", "0", "specify threshold for hit rate of evicted group to insert into the table");
 
 KNOB<string> KnobOutputDir(KNOB_MODE_WRITEONCE, "pintool",
   "output_dir", "output_dir", "specify stats file directory");
@@ -623,7 +627,7 @@ KNOB<double> KnobRandomInit(KNOB_MODE_WRITEONCE, "pintool",
 KNOB<int> KnobMcrOverflow(KNOB_MODE_WRITEONCE, "pintool",
   "mcr_overflow", "0", "option to turn/off mcr_overflow");
 KNOB<int> KnobHugePage(KNOB_MODE_WRITEONCE, "pintool",
-  "huge_page", "1", "option to turn/off huge page");
+  "huge_page", "0", "option to turn/off huge page");
 KNOB<int> KnobIsGap(KNOB_MODE_WRITEONCE, "pintool",
   "is_gap", "0", "identify whether it is running for GAP or microbenchmarks");
 KNOB<int> KnobFarRelevel(KNOB_MODE_WRITEONCE, "pintool",
@@ -641,11 +645,11 @@ KNOB<int> KnobCachelineOffset(KNOB_MODE_WRITEONCE, "pintool",
 KNOB<double> KnobSkipGapInit(KNOB_MODE_WRITEONCE, "pintool",
   "skip_gap_init", "480000000", "specify gap fast forward value");
 KNOB<double> KnobPossibilityOverflowRelevel(KNOB_MODE_WRITEONCE, "pintool",
-  "possibility_overflow_relevel", "0.1", "specify possibility of dccm releveling with overflow overhead");
+  "possibility_overflow_relevel", "1", "specify possibility of dccm releveling with overflow overhead");
 KNOB<double> KnobTimeDisablePageLevelRelevelWithOverhead(KNOB_MODE_WRITEONCE, "pintool",
-  "time_disable_page_level_relevel_with_overhead", "0", "specify time length when  page level releveling with overhead is cancelled normalized to epoch size");
+  "time_disable_page_level_relevel_with_overhead", "0.5", "specify time length when  page level releveling with overhead is cancelled normalized to epoch size");
 KNOB<double> KnobHighWcRatioThreshold(KNOB_MODE_WRITEONCE, "pintool",
-  "high_wc_ratio_threshold", "0.02", "specify possibility of dccm releveling with overflow overhead");
+  "high_wc_ratio_threshold", "1", "specify possibility of dccm releveling with overflow overhead");
 KNOB<int> KnobDelayHighLevelTreeNodeOverflow(KNOB_MODE_WRITEONCE, "pintool",
   "delay_high_level_tree_node_overflow", "0", "option to turn/off delay_high_level_tree_node_overflow");
 // Fast randomization algorithm (used instead of rand()). Used in DIP/DRRIP for probability of long vs distant insertion 
@@ -1480,6 +1484,7 @@ UINT64 otp_table_passive_relevel_total=0;
 UINT64 otp_table_hit_while_wc_cache_miss_total=0;
 UINT64 otp_table_miss_while_wc_cache_miss_total=0;
 UINT64 otp_table_hit_stats=0;
+UINT64 num_L1_counter_hit_in_memoization_table=0;
 UINT64 otp_table_miss_stats=0;
 UINT64 otp_table_miss_with_small_ctr_stats=0;
 UINT64 otp_table_miss_with_medium_ctr_stats=0;
@@ -1491,7 +1496,7 @@ UINT64 otp_table_hit_while_wc_cache_miss_stats=0;
 UINT64 otp_table_miss_while_wc_cache_miss_stats=0;
 //xinw added for average difference between groups
 double otp_average_distance;
-double time_disable_page_level_relevel_with_overhead=0;
+double time_disable_page_level_relevel_with_overhead=0.5;
 //double HIGH_WC_RATIO_THRESHOLD=0.05;
 double HIGH_WC_RATIO_THRESHOLD=0.02;
 //#define HIGH_WC_RATIO_THRESHOLD 0.1
@@ -1506,7 +1511,7 @@ double DCCM_OVERHEAD_RATIO_AFTER_WARMUP=0.05;
 int64_t dccm_overflow_traffic=0;
 int64_t dccm_remain_budget=0;
 bool is_dccm_overhead=false;
-#define TABLE_SIZE 16
+#define TABLE_SIZE 8
 #define num_recent_evicted_groups TABLE_SIZE
 //#define TABLE_SIZE 32
 //#define POTENTIAL_GROUP_NUM 21
@@ -1514,7 +1519,7 @@ bool is_dccm_overhead=false;
 //#define POTENTIAL_GROUP_NUM 31
 //UINT32 TABLE_SIZE= 16;
 //once modified in march_3_otp32_epoch1million
-#define TABLE_LINE_SIZE 8
+#define TABLE_LINE_SIZE 16
 #define threshold_for_times_of_smallest_group_with_lowest_hits (TABLE_SIZE-1)
 //#define TABLE_LINE_SIZE 2
 //#define system_max ((UINT64)(0x1)<<56)
@@ -1820,51 +1825,312 @@ printf("update the AES table: \n");
  printf(" at instruction: %lu after memory accesses:%lu\n", instruction_count_total-fast_forward_value, memory_fetches_stats);
  
 }
-bool OtpTable::need_activel_relevel(UINT64 _effective_ctr)
-{
-	sort(table, table+TABLE_SIZE); 
-	bool hit_small=false;
-	for(int table_index=0; table_index<OTP_ACTIVE_RELEVEL_SMALL_GROUP_NUMBER; table_index++)
-	{
-		if((_effective_ctr>=table[table_index])&&(_effective_ctr<table[table_index]+TABLE_LINE_SIZE))
-		{
-			hit_small=true;
+/*
+  void OtpTable::update()
+  {
+    if(!OTP_PRECALCULATION)
+	return;
+    sort(table, table+TABLE_SIZE);  
+    //xinw added for average distance between groups-begin
+    num_otp_interval++;
+    UINT64 current_sum_distance=0;
+    for(int table_index=0; table_index<TABLE_SIZE-2; table_index++)
+	    current_sum_distance=current_sum_distance+table[table_index+1]-(table[table_index]+TABLE_LINE_SIZE-1);  
+    total_average_distance+=current_sum_distance*1.0/(TABLE_SIZE-1);
+    otp_average_distance=total_average_distance*1.0/num_otp_interval;
+    //xinw added for average distance between groups-end
+
+    double high_wc_ratio=total_num_large_counter_accesses*1.0/total_num_aes_accesses;
+    if(debug_aes_table_epoch)
+    {
+	    std::ostringstream oss;
+	    //oss << KnobOutputFile.Value().c_str() <<"_morphtree_4_4_micro_baseline_debug_new_final.out";
+	    oss<<KnobOutputDir.Value().c_str()<<"/"<<"simout";
+	    std::string out_file_name = oss.str();
+	    output_file.open(out_file_name.c_str(), ios::out|ios::app);
+	    //PrintTotalStats();
+	    output_file << "AES accesses: " <<total_num_aes_accesses<<" , AES big counter accessess: " <<total_num_large_counter_accesses;
+	    if(high_wc_ratio>HIGH_WC_RATIO_THRESHOLD)
+	    	output_file << ", exceeds the threshold" <<std::endl;
+	    else
+	    	output_file << ", not exceeds the threshold" <<std::endl;
+	    output_file <<  "system_max: "<<system_max <<std::endl;
+	    output_file <<  "content of the AES table: " <<std::endl;
+            for(int table_index=0; table_index<TABLE_SIZE; table_index++)
+       		 output_file << table[table_index]<< std::endl;
+	    output_file << std::endl;
+    
+	    output_file.close();
+	    output_file.clear();
+    }
+    if(high_wc_ratio>HIGH_WC_RATIO_THRESHOLD)
+    {
+
+	    UINT64 victim_group_index=0;
+	    UINT64 min_hits=1000000000;
+	    for(int table_index=0;table_index<TABLE_SIZE;table_index++)
+	    {
+		    if(num_table_hits[table_index]<min_hits)
+		    {
+			    min_hits=num_table_hits[table_index];
+			    victim_group_index=table_index;
+		    }
+	    }
+	    UINT64  actual_group_index_with_lowest_hits=victim_group_index;
+	    if((victim_group_index==0)&&(num_table_hits[0]<(1.0*HIGHEST_GROUP_MOVE_THRESHOLD*total_num_large_counter_accesses))&&(times_of_smallest_group_with_lowest_hits>=threshold_for_times_of_smallest_group_with_lowest_hits))
+	    {
+		       if(debug_aes_table_update)
+		    {
+			    std::ostringstream oss;
+			    //oss << KnobOutputFile.Value().c_str() <<"_morphtree_4_4_micro_baseline_debug_new_final.out";
+			    oss<<KnobOutputDir.Value().c_str()<<"/"<<"simout";
+			    std::string out_file_name = oss.str();
+			    output_file.open(out_file_name.c_str(), ios::out|ios::app);
+			    //PrintTotalStats();
+			    output_file << "before update, AES accesses: " <<total_num_aes_accesses<<" , AES big counter accessess: " <<total_num_large_counter_accesses<<std::endl;
+			    output_file <<  "system_max: "<<system_max <<std::endl;
+			    output_file <<  "content of the AES table: " <<std::endl;
+			    for(int table_index=0; table_index<TABLE_SIZE; table_index++)
+			    {
+				    if(table_index==0)
+					output_file <<"counters between 0 and "<<table[0]<<" : , hits number: "<<num_table_hits_between_groups[0]*1.0/total_num_aes_accesses << std::endl;
+				    else
+					output_file <<"counters between "<<(table[table_index-1]+TABLE_LINE_SIZE)<<" and "<<table[table_index]<<" : , hits number: "<<num_table_hits_between_groups[table_index]*1.0/total_num_aes_accesses << std::endl;
+				    output_file <<"beginning counter: "<< table[table_index]<<" , hits number: "<<num_table_hits[table_index]*1.0/total_num_aes_accesses<< std::endl;
+			    }
+			     output_file <<  "content of the potential groups: " <<std::endl;
+			     
+		    	    for(int potential_group_index=0;potential_group_index<POTENTIAL_GROUP_NUM;potential_group_index++)
+				    output_file <<"beginning counter: "<< potential_groups[potential_group_index]<<" , hits number: "<<num_potential_group_hits[potential_group_index]*1.0/total_num_aes_accesses<< std::endl;
+			    
+			    output_file << std::endl;
+				
+			    output_file.close();
+			    output_file.clear();
+		    }
+
+		    times_of_smallest_group_with_lowest_hits=0;
+		    UINT64 smallest_index_for_potential_group=0;
+		    UINT64 accumulated_hits=0;
+		    for(int potential_group_index=0;potential_group_index<POTENTIAL_GROUP_NUM;potential_group_index++)
+		    {
+			    accumulated_hits+=num_potential_group_hits[potential_group_index];
+			    if((accumulated_hits*1.0)>(1.0*HIGHEST_GROUP_MOVE_THRESHOLD*total_num_large_counter_accesses))
+			    {
+				    smallest_index_for_potential_group=potential_group_index;
+				    break;
+			    }
+		    }
+		    if(smallest_index_for_potential_group<(POTENTIAL_GROUP_NUM-1))
+		    	table[victim_group_index]=potential_groups[smallest_index_for_potential_group];
+		    else
+			table[victim_group_index]=system_max;
+		    sort(table, table+TABLE_SIZE); 
+		    PrintOtpTable();
+		    min_wc=table[0];
+		    max_wc=table[TABLE_SIZE-1]+TABLE_LINE_SIZE-1;
+		    for(int potential_group_index=0;potential_group_index<POTENTIAL_GROUP_NUM;potential_group_index++) 
+		    {
+			    if(potential_group_index<POTENTIAL_GROUP_NUM-1)	
+				    potential_groups[potential_group_index]=max_wc+group_gaps[potential_group_index];
+			    else
+				    potential_groups[potential_group_index]=system_max;
+
+		    }
+		    otp_table_update_total++;
+		    if (warmup_status == WARMUP_OVER)
+			    otp_table_update_stats++;
+		    if(actual_group_index_with_lowest_hits==0)
+			times_of_smallest_group_with_lowest_hits++;
+		    else
+			times_of_smallest_group_with_lowest_hits=0;
+		     
+		     if(debug_aes_table_update)
+		    {
+			    std::ostringstream oss;
+			    //oss << KnobOutputFile.Value().c_str() <<"_morphtree_4_4_micro_baseline_debug_new_final.out";
+			    oss<<KnobOutputDir.Value().c_str()<<"/"<<"simout";
+			    std::string out_file_name = oss.str();
+			    output_file.open(out_file_name.c_str(), ios::out|ios::app);
+			    //PrintTotalStats();
+			    output_file << std::endl;
+			    output_file <<  "after update, content of the AES table: " <<std::endl;
+			    for(int table_index=0; table_index<TABLE_SIZE; table_index++)
+				    output_file <<"beginning counter: "<< table[table_index]<< std::endl;
+			    
+			    output_file << std::endl;
+				
+			    output_file.close();
+			    output_file.clear();
+		    }
+			step_value = 0;
+ 	 		PrintResults();
+
+	    }
+	    else
+	    { 
+		victim_group_index=0;
+	    	min_hits=1000000000;
+		 for(int table_index=1;table_index<TABLE_SIZE;table_index++)
+	    	{
+		    if(num_table_hits[table_index]<min_hits)
+		    {
+			    min_hits=num_table_hits[table_index];
+			    victim_group_index=table_index;
+		    }
+	    	}
+    	
+	
+	    if(num_table_hits[victim_group_index]<(1.0*HIGHEST_GROUP_MOVE_THRESHOLD*total_num_large_counter_accesses))
+	    {
+		    if(debug_aes_table_update)
+		    {
+			    std::ostringstream oss;
+			    //oss << KnobOutputFile.Value().c_str() <<"_morphtree_4_4_micro_baseline_debug_new_final.out";
+			    oss<<KnobOutputDir.Value().c_str()<<"/"<<"simout";
+			    std::string out_file_name = oss.str();
+			    output_file.open(out_file_name.c_str(), ios::out|ios::app);
+			    //PrintTotalStats();
+			    output_file << "before update, AES accesses: " <<total_num_aes_accesses<<" , AES big counter accessess: " <<total_num_large_counter_accesses<<std::endl;
+			    output_file <<  "system_max: "<<system_max <<std::endl;
+			    output_file <<  "content of the AES table: " <<std::endl;
+			    for(int table_index=0; table_index<TABLE_SIZE; table_index++)
+			    {
+				    if(table_index==0)
+					output_file <<"counters between 0 and "<<table[0]<<" : , hits number: "<<num_table_hits_between_groups[0]*1.0/total_num_aes_accesses << std::endl;
+				    else
+					output_file <<"counters between "<<(table[table_index-1]+TABLE_LINE_SIZE)<<" and "<<table[table_index]<<" : , hits number: "<<num_table_hits_between_groups[table_index]*1.0/total_num_aes_accesses << std::endl;
+				    output_file <<"beginning counter: "<< table[table_index]<<" , hits number: "<<num_table_hits[table_index]*1.0/total_num_aes_accesses<< std::endl;
+			    }
+			     output_file <<  "content of the potential groups: " <<std::endl;
+			     
+		    	    for(int potential_group_index=0;potential_group_index<POTENTIAL_GROUP_NUM;potential_group_index++)
+				    output_file <<"beginning counter: "<< potential_groups[potential_group_index]<<" , hits number: "<<num_potential_group_hits[potential_group_index]*1.0/total_num_aes_accesses<< std::endl;
+			    
+			    output_file << std::endl;
+				
+			    output_file.close();
+			    output_file.clear();
+		    }
+
+		    UINT64 smallest_index_for_potential_group=0;
+		    UINT64 accumulated_hits=0;
+		    for(int potential_group_index=0;potential_group_index<POTENTIAL_GROUP_NUM;potential_group_index++)
+		    {
+			    accumulated_hits+=num_potential_group_hits[potential_group_index];
+			    if((accumulated_hits*1.0)>(1.0*HIGHEST_GROUP_MOVE_THRESHOLD*total_num_large_counter_accesses))
+			    {
+				    smallest_index_for_potential_group=potential_group_index;
+				    break;
+			    }
+		    }
+		    if(smallest_index_for_potential_group<(POTENTIAL_GROUP_NUM-1))
+		    	table[victim_group_index]=potential_groups[smallest_index_for_potential_group];
+		    else
+			table[victim_group_index]=system_max;
+		    sort(table, table+TABLE_SIZE); 
+		    PrintOtpTable();
+		    min_wc=table[0];
+		    max_wc=table[TABLE_SIZE-1]+TABLE_LINE_SIZE-1;
+		    for(int potential_group_index=0;potential_group_index<POTENTIAL_GROUP_NUM;potential_group_index++) 
+		    {
+			    if(potential_group_index<POTENTIAL_GROUP_NUM-1)	
+				    potential_groups[potential_group_index]=max_wc+group_gaps[potential_group_index];
+			    else
+				    potential_groups[potential_group_index]=system_max;
+
+		    }
+		    otp_table_update_total++;
+		    if (warmup_status == WARMUP_OVER)
+			    otp_table_update_stats++;
+		    if(actual_group_index_with_lowest_hits==0)
+			times_of_smallest_group_with_lowest_hits++;
+		    else
+			times_of_smallest_group_with_lowest_hits=0;
+		     if(debug_aes_table_update)
+		    {
+			    std::ostringstream oss;
+			    //oss << KnobOutputFile.Value().c_str() <<"_morphtree_4_4_micro_baseline_debug_new_final.out";
+			    oss<<KnobOutputDir.Value().c_str()<<"/"<<"simout";
+			    std::string out_file_name = oss.str();
+			    output_file.open(out_file_name.c_str(), ios::out|ios::app);
+			    //PrintTotalStats();
+			    output_file << std::endl;
+			    output_file <<  "after update, content of the AES table: " <<std::endl;
+			    for(int table_index=0; table_index<TABLE_SIZE; table_index++)
+				    output_file <<"beginning counter: "<< table[table_index]<< std::endl;
+			    
+			    output_file << std::endl;
+				
+			    output_file.close();
+			    output_file.clear();
+		    }	
+			step_value = 0;
+ 	 		PrintResults();
+
+
 		}
-	}
-	if(hit_small)
-		return false;
-	if(_effective_ctr<table[OTP_ACTIVE_RELEVEL_SMALL_GROUP_NUMBER])
+
+	    } 
+    }
+    total_num_aes_accesses=0;
+    total_num_large_counter_accesses=0;
+    for(int table_index=0;table_index<TABLE_SIZE;table_index++)
+    {
+		    num_table_hits[table_index]=0;
+  		    num_table_hits_between_groups[table_index]={0};
+    }
+    for(int potential_group_index=0;potential_group_index<POTENTIAL_GROUP_NUM;potential_group_index++)
+	    num_potential_group_hits[potential_group_index]=0;
+
+    tick_in_current_interval=0;
+  }
+*/
+  bool OtpTable::need_activel_relevel(UINT64 _effective_ctr)
+  {
+    sort(table, table+TABLE_SIZE); 
+    bool hit_small=false;
+    for(int table_index=0; table_index<OTP_ACTIVE_RELEVEL_SMALL_GROUP_NUMBER; table_index++)
+    {
+	if((_effective_ctr>=table[table_index])&&(_effective_ctr<table[table_index]+TABLE_LINE_SIZE))
 	{
-		num_aes_misses++;
-		//printf("num_aes_misse: %lu\n", num_aes_misses);
-		if(num_aes_misses==(1/POSSIBILITY_RELEVEL))
-		{
-			num_aes_misses=0;
-			return true;
-		}
-		return false; 
+		hit_small=true;
 	}
-	bool found_wc=false; 
-	if(_effective_ctr>max_wc)
-		return false;
-	for(int table_index=0; table_index<TABLE_SIZE; table_index++)
+    }
+    if(hit_small)
+	return false;
+    if(_effective_ctr<table[OTP_ACTIVE_RELEVEL_SMALL_GROUP_NUMBER])
+    {
+	num_aes_misses++;
+	//printf("num_aes_misse: %lu\n", num_aes_misses);
+	if(num_aes_misses==(1/POSSIBILITY_RELEVEL))
 	{
-		if((_effective_ctr>=table[table_index])&&(_effective_ctr<table[table_index]+TABLE_LINE_SIZE))
-			found_wc=true;
+		num_aes_misses=0;
+		return true;
 	}
-	if(found_wc)
-		return false;
-	else
-	{	
-		num_aes_misses++;
-		if(num_aes_misses==(1/POSSIBILITY_RELEVEL))
+	return false; 
+    }
+    bool found_wc=false; 
+    if(_effective_ctr>max_wc)
+	return false;
+    for(int table_index=0; table_index<TABLE_SIZE; table_index++)
+	    {
+		    if((_effective_ctr>=table[table_index])&&(_effective_ctr<table[table_index]+TABLE_LINE_SIZE))
+			    found_wc=true;
+	    }
+    if(found_wc)
+	return false;
+    else
+    {	
+	    num_aes_misses++;
+	    if(num_aes_misses==(1/POSSIBILITY_RELEVEL))
 		{
-			num_aes_misses=0;
-			return true;
+		    num_aes_misses=0;
+		    return true;
 		}
-		return false; 
-	}
-}
+		    return false; 
+    }
+  }
 bool same_relevel_for_small_and_big=false;
 UINT64 OtpTable::get_relevel_wc(UINT64 _effective_ctr, bool default_clean, bool default_overflow)
 {	relevel_reason=0;
@@ -1997,6 +2263,100 @@ UINT64 OtpTable::get_nearest_bottom_group(UINT64 _effective_ctr)
 	return 0;
 }
 
+/*
+bool OtpTable::access(UINT64 _effective_ctr, UINT32 _wccache_hit)
+{
+	
+	if(_effective_ctr>system_max)
+	{
+		if(_effective_ctr<=1000000000)
+			system_max=_effective_ctr;
+		else
+		{
+			printf("unnormal effective counter: %lu for block address: %lu\n", _effective_ctr, current_block_addr_access_aes_table);
+			morph_tree.versions_level[global_counter_id].PrintNode();
+		}
+	}
+	total_num_aes_accesses++;
+	bool is_hit=false;
+	if(_effective_ctr>max_wc){
+		total_num_large_counter_accesses++;
+		for(int potential_group_index=0; potential_group_index<POTENTIAL_GROUP_NUM; potential_group_index++)
+		{
+			if(_effective_ctr<potential_groups[potential_group_index]+TABLE_LINE_SIZE)
+			{
+				num_potential_group_hits[potential_group_index]++;
+				break;
+			}
+			if(potential_group_index==(POTENTIAL_GROUP_NUM-1))
+				num_potential_group_hits[potential_group_index]++;
+		}
+	}
+	for(int table_index=0; table_index<TABLE_SIZE; table_index++)
+	{
+		if((_effective_ctr>=table[table_index])&&(_effective_ctr<table[table_index]+TABLE_LINE_SIZE))
+		{
+			is_hit=true;
+			num_table_hits[table_index]++;
+			break;
+		}
+	} 	
+	if(is_hit)
+	{
+		otp_table_hit_total++;
+		if(_wccache_hit<2)
+			otp_table_hit_while_wc_cache_miss_total++;
+		if (warmup_status == WARMUP_OVER)
+		{
+			otp_table_hit_stats++;	
+			if(_wccache_hit<2)
+				otp_table_hit_while_wc_cache_miss_stats++;
+		}
+	}
+	else
+	{
+		otp_table_miss_total++;	
+		if(_wccache_hit<2)
+			otp_table_miss_while_wc_cache_miss_total++;
+
+		if (warmup_status == WARMUP_OVER)
+		{
+			otp_table_miss_stats++;	
+			if(_wccache_hit<2)
+				otp_table_miss_while_wc_cache_miss_stats++;
+
+		}
+		if(_effective_ctr<min_wc)
+		{
+			otp_table_miss_with_small_ctr_total++;
+			if (warmup_status == WARMUP_OVER)
+				otp_table_miss_with_small_ctr_stats++;
+		}
+		else if(_effective_ctr<=max_wc)
+		{
+			otp_table_miss_with_medium_ctr_total++;
+			if (warmup_status == WARMUP_OVER)
+				otp_table_miss_with_medium_ctr_stats++;
+		}
+		else
+		{	
+			otp_table_miss_with_big_ctr_total++;
+			if (warmup_status == WARMUP_OVER)
+				otp_table_miss_with_big_ctr_stats++;
+		}
+	} 
+	if((tick_in_current_interval++)>AES_OTP_INTERVAL)
+		update();
+	if(debug_aes_hit)
+	{
+		if(is_hit)
+			printf("AES table hit for effective counter: %lu, data block addr:  %lu, instruction number: %lu\n", _effective_ctr, current_block_addr_access_aes_table, instruction_count_total-fast_forward_value );
+		else
+			printf("AES table miss for effective counter: %lu, data block addr:  %lu, instruction number: %lu\n", _effective_ctr, current_block_addr_access_aes_table, instruction_count_total-fast_forward_value );
+	}
+	return is_hit;	
+}
+*/
 OtpTable otp_table;
 double POSSIBILITY_WITH_OVERFLOW_RELEVEL=1;
 uint64_t _dccm_counter=0;
@@ -2198,12 +2558,96 @@ class MorphCtrBlock {
 
 
 MorphCtrBlock::MorphCtrBlock() {
+//InitBlock(false);
+/*
+  zcc_major_ctr_  = 0;
+  zcc_nzctrs_type_ = ZCC_16BIT_CTR;
+  zcc_nzctrs_num_ = 0;
+  zcc_max_minor_ctr_ = 0;
+  ctr_format_ = ZCC_FORMAT; 
+  ctr_is_used_ = 0;
+  ctr_level_ = 0;
+  
+  //mcr_major_ctr_ = 1;
+  mcr_major_ctr_ = 0;
+  mcr_base_1_ = 0;
+  mcr_base_2_ = 0; 
+  mcr_base_1_max_minor_ctr_ = 0;
+  mcr_base_2_max_minor_ctr_ = 0;
+  mcr_base_1_min_minor_ctr_ = MCR_MAX_MINOR_CTR_VALUE;
+  mcr_base_2_min_minor_ctr_ = MCR_MAX_MINOR_CTR_VALUE; 
+  //xinw added for otp precalculation-begin
+  if(BEGIN_WITH_BIG_COUNTER)
+  {
+     if(rand_func()%128<65)
+     {
+	    // printf("select zcc\n");
+	     zcc_major_ctr_ = (rand_func()%65536) + 2048;
+	     zcc_nzctrs_num_ = (rand_func()%64);
+	     for(int type_index=4; type_index>=0; type_index--)
+	     {
+		if(zcc_nzctrs_num_>ZCC_NZCTRS_NUM[type_index])
+		{
+			zcc_nzctrs_type_ = type_index+1;
+			break;
+		}
+	     }
+	    // printf("zcc_nztrs_type: %u\n", zcc_nzctrs_type_);
+	     UINT32 minor_index;
+	    // printf("zcc non-zero counter number: %u\n", zcc_nzctrs_num_);
+	     for(minor_index=0; minor_index<zcc_nzctrs_num_; minor_index++)
+	     {
+			minor_ctrs_[minor_index]=rand_func()&((1<<ZCC_NZCTRS_SIZES[zcc_nzctrs_type_])-1);
+			if (minor_ctrs_[minor_index]==0)
+				minor_ctrs_[minor_index]=1;
+  	    	//	printf("minor_ctr %u\n", minor_ctrs_[minor_index]);
+	     }
+	     srand(rand_seed);
+             rand_seed = (rand_seed+1)%100;
+	     std::random_shuffle(minor_ctrs_, minor_ctrs_+128);
+	     for(minor_index=0; minor_index<128; minor_index++)
+	     {
+		if(minor_ctrs_[minor_index]>zcc_max_minor_ctr_)
+			zcc_max_minor_ctr_ = minor_ctrs_[minor_index];
+	     } 
+     }	
+     else
+     { 
+	     //printf("select mcr\n");
+	     zcc_major_ctr_ = (rand_func()%65536) + 2048; 
+	     mcr_major_ctr_ = zcc_major_ctr_ >> MCR_MAJOR_CTR_SHIFT;
+	     mcr_base_1_ = zcc_major_ctr_ & MCR_BASE_MASK;
+	     mcr_base_2_ = zcc_major_ctr_ & MCR_BASE_MASK;
+	     zcc_major_ctr_ = 0;
+	     zcc_nzctrs_type_ = ZCC_16BIT_CTR;
+	     zcc_nzctrs_num_ = 0;
+	     zcc_max_minor_ctr_ = 0;
+	     UINT32 minor_index;
+	     for(minor_index=0;minor_index<128;minor_index++)
+		minor_ctrs_[minor_index] = rand_func()%8;
+	     mcr_base_1_max_minor_ctr_ = 0;
+ 	     mcr_base_2_max_minor_ctr_ = 0;
+	     for(minor_index=0;minor_index<64;minor_index++)
+	     {
+		if(minor_ctrs_[minor_index]>mcr_base_1_max_minor_ctr_)
+			mcr_base_1_max_minor_ctr_ = minor_ctrs_[minor_index];
+	     } 
+	     for(minor_index=64;minor_index<128;minor_index++)
+	     {
+		if(minor_ctrs_[minor_index]>mcr_base_2_max_minor_ctr_)
+			mcr_base_2_max_minor_ctr_ = minor_ctrs_[minor_index];
+	     }
+	     ctr_format_ = MCR_FORMAT;  
+     }	
+  }
+  //xinw added for otp precalculation-end
+  */
 }
 
 void MorphCtrBlock::InitBlock(bool is_random, uint32_t expected_level, uint32_t _node_index){
 
-	//zcc_major_ctr_  = 128;
-	zcc_major_ctr_ =(_node_index%9)*100+99;
+	zcc_major_ctr_  = 1000;
+	//zcc_major_ctr_ =(_node_index%9)*100+99;
 	if(generate_tree_nodes)
 		zcc_major_ctr_  = 0;
 		
@@ -2492,7 +2936,7 @@ void MorphCtrBlock::MinorCountersReset(bool mcr_base_set) {
     zcc_max_minor_ctr_ = 0;
     zcc_nzctrs_type_ = ZCC_16BIT_CTR;
     zcc_nzctrs_num_ = 0;
-    if(OTP_PRECALCULATION)
+    if(OTP_PRECALCULATION||OTP_L1_PRECALCULATION)
     {
     	if(otp_table.get_nearest_bottom_wc(zcc_major_ctr_))
 		zcc_major_ctr_=otp_table.get_nearest_bottom_wc(zcc_major_ctr_);
@@ -3166,7 +3610,7 @@ void MorphCtrBlock::IncrementZccMinorCounter(const UINT64& pos, bool default_cle
 	if (minor_ctrs_[pos] == 0) {
                 //xinw: fix switch from zcc to mcr
 		zcc_nzctrs_num_ += 1;
-		if(OTP_PRECALCULATION&&ctr_level_==0&&!is_stack&&should_relevel)
+		if(((OTP_PRECALCULATION&&ctr_level_==0)||(OTP_L1_PRECALCULATION&&ctr_level_==1))&&!is_stack&&should_relevel)
 		{	
 			minor_ctrs_[pos]+=1;
 			bool default_overflow=ZccCheckForOverflows(minor_ctrs_[pos]);
@@ -3184,7 +3628,8 @@ void MorphCtrBlock::IncrementZccMinorCounter(const UINT64& pos, bool default_cle
 			if (zcc_nzctrs_type_ == ZCC_4BIT_CTR) { 
 				current_pos=pos;	
 				SwitchFormatZccToMcr(); 
-				if(OTP_PRECALCULATION&&default_clean&&ctr_level_==0&&!is_stack)
+				//if(OTP_PRECALCULATION&&default_clean&&ctr_level_==0&&!is_stack)
+				if(((OTP_PRECALCULATION&&ctr_level_==0)||(OTP_L1_PRECALCULATION&&ctr_level_==1))&&!is_stack&&should_relevel)
 				{	
 					overflow_due_to_releveling_total++; 
 					if (warmup_status == WARMUP_OVER) {
@@ -3244,7 +3689,8 @@ void MorphCtrBlock::IncrementZccMinorCounter(const UINT64& pos, bool default_cle
 			}
 		}*/
 	} else {
-		if(OTP_PRECALCULATION&&ctr_level_==0&&!is_stack&&should_relevel)
+		//if(OTP_PRECALCULATION&&ctr_level_==0&&!is_stack&&should_relevel)
+		if(((OTP_PRECALCULATION&&ctr_level_==0)||(OTP_L1_PRECALCULATION&&ctr_level_==1))&&!is_stack&&should_relevel)
 		{
 				minor_ctrs_[pos]+=1;
 				bool default_overflow=ZccCheckForOverflows(minor_ctrs_[pos]);
@@ -3539,7 +3985,8 @@ void MorphCtrBlock::IncrementMcrMinorCounter(const UINT64& pos, bool default_cle
   // minor_ctr = ++minor_ctrs_[pos]; 
   //xinw commented for otp precomputation-end
   //xinw added for otp precomputation-begin 
-  if(OTP_PRECALCULATION&&ctr_level_==0&&!is_stack&&should_relevel)
+  //if(OTP_PRECALCULATION&&ctr_level_==0&&!is_stack&&should_relevel)
+  if(((OTP_PRECALCULATION&&ctr_level_==0)||(OTP_L1_PRECALCULATION&&ctr_level_==1))&&!is_stack&&should_relevel)
 	{
 	  	minor_ctrs_[pos]+=1;
 		//UINT32 default_new_ctr=minor_ctrs_[pos];
@@ -4091,10 +4538,8 @@ class MorphTree {
     void SetUsed(const UINT64& level, const UINT64& counter_id); 
     //xinw added for otp precomputation-begin
     UINT64 GetLargestCounter();
-    UINT64 GetAverageCounter();
-    UINT64 GetMediumCounter();
+    UINT64 GetLargestL1Counter();
     UINT64 GetSmallestCounter();
-    UINT64 GetCoverage(UINT64 _ctr);
     UINT64 GetNumberOfZero();
     //void PrintEffectiveCounters();
     //xinw added for otp precomputation-end
@@ -4209,9 +4654,10 @@ void MorphTree::InitTree(bool is_random)
   for (UINT32 i = 0; i < times_of_16g; ++i) {
     tree_level3[i].InitBlock(is_random,3,0);
   }
-  if(OTP_PRECALCULATION)
+  if(OTP_PRECALCULATION||OTP_L1_PRECALCULATION)
   {
 	history_max_wc=127;
+	//history_max_wc=147;
 	//history_max_wc=15136;
 	//history_max_wc=256;
 	//history_max_wc=202;
@@ -4577,40 +5023,19 @@ UINT64 MorphTree::GetLargestCounter() {
 	}
 	return _max_counter;
 }
-UINT64 MorphTree::GetAverageCounter() {
-	UINT64 _total_counter=0, _counter;
-	for(UINT ctr_block_index=0; ctr_block_index<2097152; ctr_block_index++)
+UINT64 MorphTree::GetLargestL1Counter() {
+	UINT64 _max_counter=0, _counter;
+	for(UINT ctr_block_index=0; ctr_block_index<16384; ctr_block_index++)
 	{
 	  for(UINT _pos=0; _pos<128; _pos++)
 	  {
 		
-    		_counter= versions_level[ctr_block_index].GetEffectiveCounter(0,_pos);
-		_total_counter+=_counter;
+    		_counter= tree_level1[ctr_block_index].GetEffectiveCounter(1,_pos);
+		if(_counter>_max_counter)
+			_max_counter=_counter; 
 	  }
 	}
-	return (_total_counter/(2097152*128));
-}
-double findMedian(UINT64 a[], UINT64 n)
-{
-    // First we sort the array
-    sort(a, a + n);
- 
-    // check for even case
-    if (n % 2 != 0)
-        return (double)a[n / 2];
- 
-    return (double)(a[(n - 1) / 2] + a[n / 2]) / 2.0;
-}
-UINT64 MorphTree::GetMediumCounter() {
-	UINT64* _counter_array=(UINT64*)malloc(2097152*128*sizeof(UINT64));
-	for(UINT ctr_block_index=0; ctr_block_index<2097152; ctr_block_index++)
-	{
-	  for(UINT _pos=0; _pos<128; _pos++)
-	  {
-		_counter_array[ctr_block_index*128+_pos]=versions_level[ctr_block_index].GetEffectiveCounter(0,_pos);
-	  }
-	}
-	return findMedian(_counter_array, 2097152*128);
+	return _max_counter;
 }
 
 UINT64 MorphTree::GetNumberOfZero(){
@@ -4641,21 +5066,6 @@ UINT64 MorphTree::GetSmallestCounter() {
 	}
 	return _min_counter;
 }
-UINT64 MorphTree::GetCoverage(UINT64 _ctr){
-        UINT64 cov=0;
-        for(UINT ctr_block_index=0; ctr_block_index<2097152; ctr_block_index++)
-        {
-          for(UINT _pos=0; _pos<128; _pos++)
-          {
-
-                UINT64 _counter= versions_level[ctr_block_index].GetEffectiveCounter(0,_pos);
-                if(_counter==_ctr)
-                        cov++;
-          }
-        }
-        return cov;
-}
-
 //xinw added for otp precomputation-end
 MorphTree morph_tree;
 //////////////////////////////////////////////
@@ -4698,6 +5108,7 @@ class WriteCountCache {
 		UINT32 CheckWcAndLLCCacheHit(const UINT64& wc_block_addr, const UINT64& instr_count); 
 		void UpdateOverflowOverhead( const UINT64& set, const UINT64& wc_block_addr, UINT64 _overflow_overhead);
 		void Insert(const bool& wccache_hit, const UINT64& set, const UINT64& wc_block_addr, const UINT64& instr_count, bool is_ditry, const UINT64& minor_index ); 
+		void ChainCounterIncrementFromL1(const UINT64& counter_id, const UINT64& wc_block_addr, const UINT64& minor_ctr_pos, const UINT64& instr_count, bool default_clean, bool should_relevel, UINT32 table_index);
 		void ChainCounterIncrement(const UINT64& counter_id, const UINT64& wc_block_addr, const UINT64& minor_ctr_pos, const UINT64& instr_count, bool default_clean, bool should_relevel, UINT32 table_index); 
 		void ChainCounterIncrementForPageRelevel(const UINT64& counter_id, const UINT64& wc_block_addr, const UINT64& minor_ctr_pos, const UINT64& instr_count, bool default_clean, bool should_relevel, UINT32 table_index); 
 		void PartChainCounterIncrement(const UINT64& counter_id, const UINT64& wc_block_addr,   bool default_clean, bool should_relevel, UINT32 begin_level);
@@ -5247,6 +5658,53 @@ void WriteCountCache::ChainCounterIncrementForSmall(const UINT64& counter_id, co
   ////std::cout << "chaincounterincrement" << std::endl;
 } 
 */
+void WriteCountCache::ChainCounterIncrementFromL1(const UINT64& counter_id, const UINT64& wc_block_addr, const UINT64& minor_ctr_pos, const UINT64& instr_count, bool default_clean, bool should_relevel, UINT32 table_index) {
+	relevel_reason=0;
+	UINT32 curr_tree_level = 0;
+	UINT64 curr_wc_block_addr = wc_block_addr; 
+	UINT64 curr_counter_id = counter_id; 
+	/*
+	if(table_index==1000)
+	{
+        	if(debug_overflow||debug_counter_increment)
+			printf("before L0 node calling IncrementMinorCounter\n");
+		morph_tree.IncrementMinorCounter(curr_tree_level, counter_id, minor_ctr_pos, default_clean, should_relevel);
+	}
+	else{
+        	if(debug_overflow||debug_counter_increment)
+			printf("before L0 node calling IncrementMinorCounterForSmall\n");
+	
+		morph_tree.IncrementMinorCounterForSmall(curr_tree_level, counter_id, minor_ctr_pos, default_clean, should_relevel, table_index);
+	}*/
+	while (curr_tree_level < 3) {
+		curr_wc_block_addr = morph_tree.GetParentCounterAddress(curr_tree_level, curr_wc_block_addr);
+		UINT64 curr_wccache_set = curr_wc_block_addr & WCCACHE_SET_MASK;
+		UINT curr_wccache_hit = IsWcCacheHit(curr_wccache_set, curr_wc_block_addr, instr_count, true); 
+		//xinw added for metadata cache debugging
+		if(debug_metadata_cache){
+			printf("tree node level: %u , wc block address: %lu , hit/miss(0 means miss): %u, due to normal data write\n ", curr_tree_level+1,curr_wc_block_addr, curr_wccache_hit);
+		}
+		UINT64 curr_minor_ctr_pos = curr_counter_id & MINOR_CTR_POS_MASK;
+		Insert(curr_wccache_hit, curr_wccache_set, curr_wc_block_addr, instr_count, true, curr_minor_ctr_pos);
+		curr_tree_level++;
+		wc_cache_tree_access_stats[curr_tree_level]++;
+		wc_cache_tree_access_write_stats[curr_tree_level]++;
+		if(curr_wccache_hit)
+			wc_cache_tree_hit_write_stats[curr_tree_level]++;	
+		curr_counter_id = morph_tree.GetLevelCounterId(curr_tree_level, curr_wc_block_addr);	
+        	if(debug_overflow||debug_counter_increment)
+			printf("before L%u node calling IncrementMinorCounter\n", curr_tree_level);
+		
+			//ChainCounterIncrement(evict_counter_id, evict_wc_block_addr, evict_minor_ctr_pos, instruction_count, false,true,1000);
+		if((curr_tree_level==1)&&(OTP_L1_PRECALCULATION)){
+			morph_tree.IncrementMinorCounter(curr_tree_level, curr_counter_id, curr_minor_ctr_pos, default_clean, true);
+		}
+		else
+			morph_tree.IncrementMinorCounter(curr_tree_level, curr_counter_id, curr_minor_ctr_pos, default_clean, false);
+	}
+	////std::cout << "chaincounterincrement" << std::endl;
+}
+
 void WriteCountCache::ChainCounterIncrement(const UINT64& counter_id, const UINT64& wc_block_addr, const UINT64& minor_ctr_pos, const UINT64& instr_count, bool default_clean, bool should_relevel, UINT32 table_index) {
 	relevel_reason=0;
 	UINT32 curr_tree_level = 0;
@@ -5282,8 +5740,24 @@ void WriteCountCache::ChainCounterIncrement(const UINT64& counter_id, const UINT
 		curr_counter_id = morph_tree.GetLevelCounterId(curr_tree_level, curr_wc_block_addr);	
         	if(debug_overflow||debug_counter_increment)
 			printf("before L%u node calling IncrementMinorCounter\n", curr_tree_level);
-	
-		morph_tree.IncrementMinorCounter(curr_tree_level, curr_counter_id, curr_minor_ctr_pos, default_clean, false);
+		
+			//ChainCounterIncrement(evict_counter_id, evict_wc_block_addr, evict_minor_ctr_pos, instruction_count, false,true,1000);
+		if((curr_tree_level==1)&&(OTP_L1_PRECALCULATION)){
+			int overflow_under_baseline=morph_tree.tree_level1[curr_counter_id].will_overflow(curr_minor_ctr_pos, false, false);
+			int overflow_under_rmcc=morph_tree.tree_level1[curr_counter_id].will_overflow(curr_minor_ctr_pos, false, true);
+			if (overflow_under_rmcc<=overflow_under_baseline){
+				morph_tree.IncrementMinorCounter(curr_tree_level, curr_counter_id, curr_minor_ctr_pos, default_clean, true);
+			}else if (otp_table.remaining_dccm_budget_nonzero()){
+					is_dccm_overhead=true;
+					morph_tree.IncrementMinorCounter(curr_tree_level, curr_counter_id, curr_minor_ctr_pos, default_clean, true);
+					is_dccm_overhead=false;
+					
+			}else{
+				morph_tree.IncrementMinorCounter(curr_tree_level, curr_counter_id, curr_minor_ctr_pos, default_clean, false);
+			}
+		}
+		else
+			morph_tree.IncrementMinorCounter(curr_tree_level, curr_counter_id, curr_minor_ctr_pos, default_clean, false);
 	}
 	////std::cout << "chaincounterincrement" << std::endl;
 }
@@ -5390,6 +5864,7 @@ UINT32 WriteCountCache::will_overflow(const UINT64& counter_id, const UINT64& wc
     curr_tree_level++;
     curr_counter_id = morph_tree.GetLevelCounterId(curr_tree_level, curr_wc_block_addr);
     _overflow_traffic_in_current_level=morph_tree.will_overflow(curr_tree_level, curr_counter_id, curr_minor_ctr_pos, default_clean, false);
+    if(curr_tree_level>1)
        _overflow_traffic+=_overflow_traffic_in_current_level; 
    //_overflow_traffic+=morph_tree.will_overflow(curr_tree_level, curr_counter_id, curr_minor_ctr_pos, default_clean, false);
   }
@@ -5892,21 +6367,7 @@ VOID PrintTotalStats() {
 
 VOID PrintAfterWarmupStats() {
   output_file << "==========STATS_AFTER_WARMUP==========" << std::endl << std::endl;
- if(is_final){
-        UINT64 coverage_total=0;
-        for(int i=0;i<TABLE_SIZE;i++){
-                for(int j=0;j<TABLE_LINE_SIZE;j++){
-                        output_file << "Coverage[" << (i*TABLE_LINE_SIZE+j) << "]: " << morph_tree.GetCoverage(otp_table.table[i]+j) <<std::endl ;
-                        coverage_total+=morph_tree.GetCoverage(otp_table.table[i]+j);
-                }    
-        }     
-        output_file << "CoverageTotal: " << coverage_total <<std::endl;
-  }
-
   //xinw added statistics: begin
-  output_file << "MaxCounterValue: " << morph_tree.GetLargestCounter() << std::endl;
-  output_file << "AverageCounterValue: " << morph_tree.GetAverageCounter() << std::endl;
-  //output_file << "MediumCounterValue: " << morph_tree.GetMediumCounter() << std::endl;
   output_file << "LoadInducedMPKI: " << load_induced_misses_stats*1000/(double)instruction_count_stats << std::endl;
   output_file << "MemActionPKI: " << (memory_writebacks_stats + memory_fetches_stats)*1000/(double)instruction_count_stats << std::endl; 
   //xinw added statistics: end
@@ -6941,7 +7402,7 @@ UINT32 CacheCall(THREADID threadid, const UINT32& instruction_operation, const U
 	*/
 	instruction_count_total=get_total_inst_num();
 	if((instruction_count_total > fast_forward_value)&&((instruction_count_total-fast_forward_value)>(1000000000*index_of_billion))){    
-	//if((instruction_count_total > fast_forward_value)&&((instruction_count_total-fast_forward_value)>(10000000*index_of_billion))){    
+	//if((instruction_count_total > fast_forward_value)&&((instruction_count_total-fast_forward_value)>(100000000*index_of_billion))){    
 		time_t my_time = time(NULL);
 		cout << " pintool finish " <<index_of_billion<< " billion instructions at time "<<ctime(&my_time) <<endl;
 		step_value = 0;
@@ -7017,6 +7478,13 @@ UINT32 CacheCall(THREADID threadid, const UINT32& instruction_operation, const U
 	}
 	if (is_wccache_hit < 2) {
 		wc_lru_cache.PreemptiveVerification(wc_block_addr, instruction_count);
+		if(OTP_L1_PRECALCULATION){
+    			UINT64 L1_wc_block_addr = morph_tree.GetParentCounterAddress(0, wc_block_addr);
+			UINT64 L1_counter_id = morph_tree.GetLevelCounterId(1, L1_wc_block_addr);
+    			UINT64 L1_minor_ctr_pos = L1_counter_id & MINOR_CTR_POS_MASK;
+			UINT64 effective_l1_counter = morph_tree.GetEffectiveCounter(1, L1_counter_id, L1_minor_ctr_pos);
+			otp_table.access(effective_l1_counter, is_wccache_hit);
+        	} 
 	}
 	UINT64 counter_id = morph_tree.GetLevelCounterId(0, wc_block_addr);
 	UINT64 minor_ctr_pos = (block_addr >> DATA_CACHE_BLOCK_BITS) & MINOR_CTR_POS_MASK;
@@ -7026,7 +7494,7 @@ UINT32 CacheCall(THREADID threadid, const UINT32& instruction_operation, const U
 	global_counter_id=counter_id;
 	global_minor_ctr_pos=minor_ctr_pos;
 	//xinw added for otp precomputation-begin
-	if(OTP_PRECALCULATION) 
+		if(OTP_PRECALCULATION) 
 	{
 		dccm_block_level_relevel=0;
 		current_block_addr_access_aes_table=block_addr;
@@ -7138,6 +7606,23 @@ UINT32 CacheCall(THREADID threadid, const UINT32& instruction_operation, const U
 			dccm_block_level_relevel=0;
 		}
     } 
+    else if(OTP_L1_PRECALCULATION){
+		if((counter_for_relevel_L1_counter++)%100<(possibility_for_updating_L1_while_read*100)){
+			if((!wc_lru_cache.will_overflow(counter_id, wc_block_addr, minor_ctr_pos, instruction_count, true, true))){
+				wc_lru_cache.ChainCounterIncrementFromL1(counter_id, wc_block_addr, minor_ctr_pos, instruction_count, true, true, 1000);
+			}else if (otp_table.remaining_dccm_budget_nonzero()){
+					is_dccm_overhead=true;
+					wc_lru_cache.ChainCounterIncrementFromL1(counter_id, wc_block_addr, minor_ctr_pos, instruction_count, true, true, 1000);
+					is_dccm_overhead=false;
+			}
+			if(debug_memoize_l1)
+				printf("possibilistic l1 relevel: yes\n");
+		}
+		else{
+			if(debug_memoize_l1)
+				printf("possibilistic l1 relevel: no\n");
+		}
+    }
     else if((int)KnobRecentAes.Value()){
         if(access_recent_aes(effective_version))
             otp_table_hit_stats++;	
@@ -7186,8 +7671,8 @@ VOID RecordMemRead(VOID * ip, VOID * addr, UINT32 stack_status, ADDRINT rbp, ADD
 	ADDRINT * addr_ptr = (ADDRINT*)addr;
 	ADDRINT value;
 	PIN_SafeCopy(&value, addr_ptr, sizeof(ADDRINT));
-	uint64_t right_shift_value=value>>20;
-	if  (is_gap&&(right_shift_value==498374593872)){
+	//uint64_t right_shift_value=value>>20;
+	/*if  (is_gap&&(right_shift_value==498374593872)){
 		PIN_GetLock(&pinLock, threadid + 1);
 		current_iteration_of_microbenchmark++;
 		fprintf(stdout, "the lowest-20-bits value while loading flag variable is %lu by PC %lu in iteration %d\n", (value-(right_shift_value<<20)), *((uint64_t *)ip), current_iteration_of_microbenchmark);
@@ -7199,7 +7684,15 @@ VOID RecordMemRead(VOID * ip, VOID * addr, UINT32 stack_status, ADDRINT rbp, ADD
 			warmup_status = WARMUP_OVER;
 		}
 		PIN_ReleaseLock(&pinLock);
+	}*/
+	if(is_gap){
+	instruction_count_total=get_total_inst_num();
+	if(instruction_count_total > fast_forward_value){
+		warmup_status = WARMUP_OVER;	
+	  }
 	}
+	//if((instruction_count_total > fast_forward_value)&&((instruction_count_total-fast_forward_value)>(1000000000*index_of_billion))){    
+	
 	if (warmup_status == WARMUP_OVER) {
 		memory_instruction_count_stats[threadid*16]++;
 		CacheCall(threadid, READ_OP, instruction_count_total, (UINT64)ip, ((UINT64)(addr)+CACHELINE_OFFSET) & DATA_BLOCK_FLOOR_ADDR_MASK, stack_status, false, access_data);		
@@ -7387,7 +7880,6 @@ VOID Instruction(INS ins, VOID *v)
 
 VOID Fini(INT32 code, VOID *v)
 { 
-  is_final=1;
   step_value = 0;
   PrintResults();
   //PrintOverflowResults();
@@ -7439,6 +7931,7 @@ for(int i=0;i<max_num_of_threads;i++){
   
   if(PIN_Init(argc, argv))
     return Usage();
+  possibility_for_updating_L1_while_read=(double)KnobPossibilityForUpdatingL1WhileRead.Value();
   time_disable_page_level_relevel_with_overhead=(double)KnobTimeDisablePageLevelRelevelWithOverhead.Value();
   insert_metadata_into_LLC=(int)KnobInsertMetadataIntoLLC.Value();
  
@@ -7450,7 +7943,9 @@ for(int i=0;i<max_num_of_threads;i++){
   far_relevel=(int)KnobFarRelevel.Value();
   use_page_zero=(int)KnobUsePageZero.Value();
   huge_page=(int)KnobHugePage.Value();
-  OTP_PRECALCULATION=(int)KnobPredictiveDecryption.Value();
+  //OTP_PRECALCULATION=(int)KnobPredictiveDecryption.Value();
+  OTP_PRECALCULATION=0;
+  OTP_L1_PRECALCULATION=(int)KnobPredictiveDecryption.Value();
   fast_forward_value = (UINT64)KnobFastForward.Value();  
   skip_gap_init = (UINT64)KnobSkipGapInit.Value();  
   RUN_INST_VAL = (UINT64)KnobRunInsts.Value();
@@ -7649,6 +8144,7 @@ for(int i=0;i<max_num_of_threads;i++){
 			morph_tree.tree_level2[index].PrintNode();
 	}
 	printf("finished reading the tree\n");
+	/*
 	ifstream file_table;
 	file_table.open(KnobTableCpt.Value().c_str(), std::ifstream::binary);
 
@@ -7656,10 +8152,13 @@ for(int i=0;i<max_num_of_threads;i++){
     file_table.close();
     file_table.clear();
     printf("finished reading the table\n");
+	*/
 	printf("the max counter in the tree is: %lu\n", morph_tree.GetLargestCounter());
+	printf("the max L1 counter in the tree is: %lu\n", morph_tree.GetLargestL1Counter());
+	otp_table.reset(morph_tree.GetLargestL1Counter(), 0);
 	printf("the min counter in the tree is: %lu\n", morph_tree.GetSmallestCounter());
 	printf("the number of  counter 0 in the tree is: %lu\n", morph_tree.GetNumberOfZero());
-
+    
 }
 
   HIGH_WC_RATIO_THRESHOLD=(double)KnobHighWcRatioThreshold.Value();
@@ -8051,7 +8550,10 @@ bool OtpTable::access(UINT64 _effective_ctr, UINT32 _wccache_hit)
 		}
 	} 
 	if((tick_in_current_interval++)>AES_OTP_INTERVAL)
+	{
+		//printf("tick_in_current_interval: %lu, AES_OTP_INTERVAL: %lu", tick_in_current_interval, AES_OTP_INTERVAL);
 		update();
+	}
 	if(debug_aes_hit)
 	{
 		if(is_hit)
@@ -8242,13 +8744,15 @@ void OtpTable::PrintTableUpdateAndResetStats()
   {
       num_otp_interval++;
       if(debug_aes_table_update)
-      {
+      {	
+	  //printf("tick_in_current_interval: %lu, AES_OTP_INTERVAL: %lu", tick_in_current_interval, AES_OTP_INTERVAL);
           std::ostringstream oss;
           //oss << KnobOutputFile.Value().c_str() <<"_morphtree_4_4_micro_baseline_debug_new_final.out";
           oss<<KnobOutputDir.Value().c_str()<<"/"<<"simout";
           std::string out_file_name = oss.str();
           output_file.open(out_file_name.c_str(), ios::out|ios::app);
           //PrintTotalStats();
+	  output_file << "tick_in_current_interval: "<<tick_in_current_interval<<" , AES_OTP_INTERVAL: "<<AES_OTP_INTERVAL<<std::endl;
           output_file << "at instruction: "<<(instruction_count_total-fast_forward_value)<<" , at epoch index: "<<num_otp_interval<<std::endl;
           output_file << "at end of epoch, AES accesses: " <<total_num_aes_accesses<<" , AES big counter accessess: " <<total_num_large_counter_accesses<<std::endl;
           output_file <<  "system_max: "<<system_max <<std::endl;
@@ -8286,7 +8790,8 @@ void OtpTable::PrintTableUpdateAndResetStats()
           output_file.close();
           output_file.clear();
       }
-    if(!OTP_PRECALCULATION)
+    //if(!OTP_PRECALCULATION)
+    if((!OTP_PRECALCULATION)&&(!OTP_L1_PRECALCULATION))
 	return;
     sort(table, table+TABLE_SIZE);  
     //xinw added for average distance between groups-begin
