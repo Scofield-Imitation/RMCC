@@ -120,7 +120,7 @@ class Stat:
 	    self.statVec = [['TotalMemFetches:'],['TotalL2CountersFetches:']]
         elif self.stat == 'normalized_TotalOverflowFetches':
 	    self.statVec = [['TotalMemFetches:'],['TotalOverflowFetches:']]
- 	elif self.stat == 'otp_table_hit_rate':
+ 	elif self.stat == 'pintool_aes_table_hit_rate' or self.stat == 'pintool_aes_l1_hit_rate':
 	    self.statVec = [['OTP_TABLE_Hits:'],['OTP_TABLE_Misses:']]
 	elif self.stat == 'otp_table_hit_rate_under_counter_miss':
 	    self.statVec = [['OTP_TABLE_Hits_While_Wc_Cache_Misses:'],['OTP_TABLE_Misses_While_Wc_Cache_Misses:']]
@@ -230,7 +230,7 @@ class Stat:
             return np.sum(self.np_statVec)
         elif self.stat == 'normalzied_TotalMemWriteBacks' or self.stat == 'normalized_TotalWcCacheWrites' or self.stat == 'normalized_TotalVersionsFetches' or self.stat =='normalized_TotalL1CountersFetches' or  self.stat == 'normalized_TotalL2CountersFetches' or self.stat =='normalized_TotalOverflowFetches':
        	    return np.sum(self.np_statVec[1])*1.0/np.sum(self.np_statVec[0])
-	elif self.stat == 'otp_table_hit_rate' or self.stat == 'otp_table_hit_rate_under_counter_miss':
+	elif self.stat == 'pintool_aes_table_hit_rate' or self.stat == 'pintool_aes_l1_hit_rate' or self.stat == 'otp_table_hit_rate_under_counter_miss':
 	    return np.sum(self.np_statVec[0])*1.0/(np.sum(self.np_statVec[0])+np.sum(self.np_statVec[1]))
 	elif self.stat == 'page_l1_miss_ratio' or self.stat == 'page_l2_miss_ratio':
 	    return (np.sum(self.np_statVec[4])+np.sum(self.np_statVec[5])+np.sum(self.np_statVec[6])+np.sum(self.np_statVec[7]))*1.0/(np.sum(self.np_statVec[0])+np.sum(self.np_statVec[1])-np.sum(self.np_statVec[2])-np.sum(self.np_statVec[3]))

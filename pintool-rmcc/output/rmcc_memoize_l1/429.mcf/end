@@ -1,0 +1,965 @@
+smallest counter in the memory: 1000
+largest counter in the memory: 1000
+update the AES table: 
+0 16 32 48 64 80 96 112  at instruction: 1 after memory accesses:0
+all characters read successfully.finished reading the tree
+the max counter in the tree is: 1523
+the max L1 counter in the tree is: 83897
+the min counter in the tree is: 1
+the number of  counter 0 in the tree is: 0
+before PIN_StartProgram, the aes table is correct or not: 0
+ pintool finish 1 billion instructions at time Sat Aug 20 03:38:38 2022
+
+ToolComplete
+ pintool finish 2 billion instructions at time Sat Aug 20 03:40:41 2022
+
+ToolComplete
+ pintool finish 3 billion instructions at time Sat Aug 20 03:42:46 2022
+
+ToolComplete
+ pintool finish 4 billion instructions at time Sat Aug 20 03:44:47 2022
+
+ToolComplete
+ pintool finish 5 billion instructions at time Sat Aug 20 03:46:38 2022
+
+ToolComplete
+ pintool finish 6 billion instructions at time Sat Aug 20 03:48:19 2022
+
+ToolComplete
+ pintool finish 7 billion instructions at time Sat Aug 20 03:50:03 2022
+
+ToolComplete
+ pintool finish 8 billion instructions at time Sat Aug 20 03:51:32 2022
+
+ToolComplete
+ pintool finish 9 billion instructions at time Sat Aug 20 03:52:48 2022
+
+ToolComplete
+ pintool finish 10 billion instructions at time Sat Aug 20 03:53:58 2022
+
+ToolComplete
+ pintool finish 11 billion instructions at time Sat Aug 20 03:55:13 2022
+
+ToolComplete
+ pintool finish 12 billion instructions at time Sat Aug 20 03:56:35 2022
+
+ToolComplete
+ pintool finish 13 billion instructions at time Sat Aug 20 03:58:06 2022
+
+ToolComplete
+ pintool finish 14 billion instructions at time Sat Aug 20 03:59:38 2022
+
+ToolComplete
+ pintool finish 15 billion instructions at time Sat Aug 20 04:01:06 2022
+
+ToolComplete
+ pintool finish 16 billion instructions at time Sat Aug 20 04:02:38 2022
+
+ToolComplete
+ pintool finish 17 billion instructions at time Sat Aug 20 04:04:11 2022
+
+ToolComplete
+ pintool finish 18 billion instructions at time Sat Aug 20 04:05:43 2022
+
+ToolComplete
+ pintool finish 19 billion instructions at time Sat Aug 20 04:07:14 2022
+
+ToolComplete
+ pintool finish 20 billion instructions at time Sat Aug 20 04:08:47 2022
+
+ToolComplete
+ pintool finish 21 billion instructions at time Sat Aug 20 04:10:20 2022
+
+ToolComplete
+ pintool finish 22 billion instructions at time Sat Aug 20 04:11:54 2022
+
+ToolComplete
+ pintool finish 23 billion instructions at time Sat Aug 20 04:13:28 2022
+
+ToolComplete
+ pintool finish 24 billion instructions at time Sat Aug 20 04:15:05 2022
+
+ToolComplete
+ pintool finish 25 billion instructions at time Sat Aug 20 04:16:44 2022
+
+ToolComplete
+ pintool finish 26 billion instructions at time Sat Aug 20 04:18:28 2022
+
+ToolComplete
+ pintool finish 27 billion instructions at time Sat Aug 20 04:20:19 2022
+
+ToolComplete
+ pintool finish 28 billion instructions at time Sat Aug 20 04:22:15 2022
+
+ToolComplete
+ pintool finish 29 billion instructions at time Sat Aug 20 04:24:13 2022
+
+ToolComplete
+ pintool finish 30 billion instructions at time Sat Aug 20 04:26:13 2022
+
+ToolComplete
+ pintool finish 31 billion instructions at time Sat Aug 20 04:28:04 2022
+
+ToolComplete
+ pintool finish 32 billion instructions at time Sat Aug 20 04:29:56 2022
+
+ToolComplete
+ pintool finish 33 billion instructions at time Sat Aug 20 04:31:51 2022
+
+ToolComplete
+ pintool finish 34 billion instructions at time Sat Aug 20 04:33:40 2022
+
+ToolComplete
+ pintool finish 35 billion instructions at time Sat Aug 20 04:35:15 2022
+
+ToolComplete
+ pintool finish 36 billion instructions at time Sat Aug 20 04:36:50 2022
+
+ToolComplete
+ pintool finish 37 billion instructions at time Sat Aug 20 04:38:34 2022
+
+ToolComplete
+ pintool finish 38 billion instructions at time Sat Aug 20 04:41:06 2022
+
+ToolComplete
+ pintool finish 39 billion instructions at time Sat Aug 20 04:43:26 2022
+
+ToolComplete
+ pintool finish 40 billion instructions at time Sat Aug 20 04:45:53 2022
+
+ToolComplete
+ pintool finish 41 billion instructions at time Sat Aug 20 04:48:22 2022
+
+ToolComplete
+ pintool finish 42 billion instructions at time Sat Aug 20 04:50:49 2022
+
+ToolComplete
+ pintool finish 43 billion instructions at time Sat Aug 20 04:53:15 2022
+
+ToolComplete
+ pintool finish 44 billion instructions at time Sat Aug 20 04:55:39 2022
+
+ToolComplete
+ pintool finish 45 billion instructions at time Sat Aug 20 04:58:06 2022
+
+ToolComplete
+ pintool finish 46 billion instructions at time Sat Aug 20 05:00:31 2022
+
+ToolComplete
+ pintool finish 47 billion instructions at time Sat Aug 20 05:03:04 2022
+
+ToolComplete
+ pintool finish 48 billion instructions at time Sat Aug 20 05:05:43 2022
+
+ToolComplete
+ pintool finish 49 billion instructions at time Sat Aug 20 05:08:23 2022
+
+ToolComplete
+ pintool finish 50 billion instructions at time Sat Aug 20 05:11:03 2022
+
+ToolComplete
+ pintool finish 51 billion instructions at time Sat Aug 20 05:13:46 2022
+
+ToolComplete
+ pintool finish 52 billion instructions at time Sat Aug 20 05:16:27 2022
+
+ToolComplete
+ pintool finish 53 billion instructions at time Sat Aug 20 05:19:09 2022
+
+ToolComplete
+ pintool finish 54 billion instructions at time Sat Aug 20 05:21:52 2022
+
+ToolComplete
+ pintool finish 55 billion instructions at time Sat Aug 20 05:24:34 2022
+
+ToolComplete
+ pintool finish 56 billion instructions at time Sat Aug 20 05:27:18 2022
+
+ToolComplete
+ pintool finish 57 billion instructions at time Sat Aug 20 05:29:59 2022
+
+ToolComplete
+ pintool finish 58 billion instructions at time Sat Aug 20 05:32:42 2022
+
+ToolComplete
+ pintool finish 59 billion instructions at time Sat Aug 20 05:35:36 2022
+
+ToolComplete
+ pintool finish 60 billion instructions at time Sat Aug 20 05:38:26 2022
+
+ToolComplete
+ pintool finish 61 billion instructions at time Sat Aug 20 05:41:17 2022
+
+ToolComplete
+ pintool finish 62 billion instructions at time Sat Aug 20 05:44:12 2022
+
+ToolComplete
+ pintool finish 63 billion instructions at time Sat Aug 20 05:47:08 2022
+
+ToolComplete
+ pintool finish 64 billion instructions at time Sat Aug 20 05:50:01 2022
+
+ToolComplete
+ pintool finish 65 billion instructions at time Sat Aug 20 05:52:58 2022
+
+ToolComplete
+ pintool finish 66 billion instructions at time Sat Aug 20 05:55:52 2022
+
+ToolComplete
+ pintool finish 67 billion instructions at time Sat Aug 20 05:58:42 2022
+
+ToolComplete
+ pintool finish 68 billion instructions at time Sat Aug 20 06:01:26 2022
+
+ToolComplete
+ pintool finish 69 billion instructions at time Sat Aug 20 06:04:07 2022
+
+ToolComplete
+ pintool finish 70 billion instructions at time Sat Aug 20 06:06:49 2022
+
+ToolComplete
+ pintool finish 71 billion instructions at time Sat Aug 20 06:09:30 2022
+
+ToolComplete
+ pintool finish 72 billion instructions at time Sat Aug 20 06:12:09 2022
+
+ToolComplete
+ pintool finish 73 billion instructions at time Sat Aug 20 06:14:50 2022
+
+ToolComplete
+ pintool finish 74 billion instructions at time Sat Aug 20 06:17:34 2022
+
+ToolComplete
+ pintool finish 75 billion instructions at time Sat Aug 20 06:20:16 2022
+
+ToolComplete
+ pintool finish 76 billion instructions at time Sat Aug 20 06:22:58 2022
+
+ToolComplete
+ pintool finish 77 billion instructions at time Sat Aug 20 06:25:43 2022
+
+ToolComplete
+ pintool finish 78 billion instructions at time Sat Aug 20 06:28:26 2022
+
+ToolComplete
+ pintool finish 79 billion instructions at time Sat Aug 20 06:31:02 2022
+
+ToolComplete
+ pintool finish 80 billion instructions at time Sat Aug 20 06:33:30 2022
+
+ToolComplete
+ pintool finish 81 billion instructions at time Sat Aug 20 06:35:59 2022
+
+ToolComplete
+ pintool finish 82 billion instructions at time Sat Aug 20 06:38:25 2022
+
+ToolComplete
+ pintool finish 83 billion instructions at time Sat Aug 20 06:40:51 2022
+
+ToolComplete
+ pintool finish 84 billion instructions at time Sat Aug 20 06:43:17 2022
+
+ToolComplete
+ pintool finish 85 billion instructions at time Sat Aug 20 06:45:40 2022
+
+ToolComplete
+ pintool finish 86 billion instructions at time Sat Aug 20 06:48:02 2022
+
+ToolComplete
+ pintool finish 87 billion instructions at time Sat Aug 20 06:50:27 2022
+
+ToolComplete
+ pintool finish 88 billion instructions at time Sat Aug 20 06:53:01 2022
+
+ToolComplete
+ pintool finish 89 billion instructions at time Sat Aug 20 06:55:35 2022
+
+ToolComplete
+ pintool finish 90 billion instructions at time Sat Aug 20 06:58:09 2022
+
+ToolComplete
+ pintool finish 91 billion instructions at time Sat Aug 20 07:00:43 2022
+
+ToolComplete
+ pintool finish 92 billion instructions at time Sat Aug 20 07:03:17 2022
+
+ToolComplete
+ pintool finish 93 billion instructions at time Sat Aug 20 07:05:50 2022
+
+ToolComplete
+ pintool finish 94 billion instructions at time Sat Aug 20 07:08:00 2022
+
+ToolComplete
+ pintool finish 95 billion instructions at time Sat Aug 20 07:09:37 2022
+
+ToolComplete
+ pintool finish 96 billion instructions at time Sat Aug 20 07:11:17 2022
+
+ToolComplete
+ pintool finish 97 billion instructions at time Sat Aug 20 07:13:00 2022
+
+ToolComplete
+ pintool finish 98 billion instructions at time Sat Aug 20 07:14:34 2022
+
+ToolComplete
+ pintool finish 99 billion instructions at time Sat Aug 20 07:15:45 2022
+
+ToolComplete
+ pintool finish 100 billion instructions at time Sat Aug 20 07:16:58 2022
+
+ToolComplete
+ pintool finish 101 billion instructions at time Sat Aug 20 07:18:11 2022
+
+ToolComplete
+ pintool finish 102 billion instructions at time Sat Aug 20 07:19:24 2022
+
+ToolComplete
+ pintool finish 103 billion instructions at time Sat Aug 20 07:20:34 2022
+
+ToolComplete
+ pintool finish 104 billion instructions at time Sat Aug 20 07:21:47 2022
+
+ToolComplete
+ pintool finish 105 billion instructions at time Sat Aug 20 07:22:56 2022
+
+ToolComplete
+ pintool finish 106 billion instructions at time Sat Aug 20 07:24:09 2022
+
+ToolComplete
+ pintool finish 107 billion instructions at time Sat Aug 20 07:25:22 2022
+
+ToolComplete
+ pintool finish 108 billion instructions at time Sat Aug 20 07:26:40 2022
+
+ToolComplete
+ pintool finish 109 billion instructions at time Sat Aug 20 07:28:22 2022
+
+ToolComplete
+ pintool finish 110 billion instructions at time Sat Aug 20 07:30:03 2022
+
+ToolComplete
+ pintool finish 111 billion instructions at time Sat Aug 20 07:31:35 2022
+
+ToolComplete
+ pintool finish 112 billion instructions at time Sat Aug 20 07:33:01 2022
+
+ToolComplete
+ pintool finish 113 billion instructions at time Sat Aug 20 07:34:22 2022
+
+ToolComplete
+ pintool finish 114 billion instructions at time Sat Aug 20 07:35:40 2022
+
+ToolComplete
+ pintool finish 115 billion instructions at time Sat Aug 20 07:37:01 2022
+
+ToolComplete
+ pintool finish 116 billion instructions at time Sat Aug 20 07:38:20 2022
+
+ToolComplete
+ pintool finish 117 billion instructions at time Sat Aug 20 07:39:41 2022
+
+ToolComplete
+ pintool finish 118 billion instructions at time Sat Aug 20 07:41:05 2022
+
+ToolComplete
+ pintool finish 119 billion instructions at time Sat Aug 20 07:42:35 2022
+
+ToolComplete
+ pintool finish 120 billion instructions at time Sat Aug 20 07:43:52 2022
+
+ToolComplete
+ pintool finish 121 billion instructions at time Sat Aug 20 07:45:11 2022
+
+ToolComplete
+ pintool finish 122 billion instructions at time Sat Aug 20 07:47:10 2022
+
+ToolComplete
+ pintool finish 123 billion instructions at time Sat Aug 20 07:49:26 2022
+
+ToolComplete
+ pintool finish 124 billion instructions at time Sat Aug 20 07:51:33 2022
+
+ToolComplete
+ pintool finish 125 billion instructions at time Sat Aug 20 07:53:46 2022
+
+ToolComplete
+ pintool finish 126 billion instructions at time Sat Aug 20 07:55:58 2022
+
+ToolComplete
+ pintool finish 127 billion instructions at time Sat Aug 20 07:58:17 2022
+
+ToolComplete
+ pintool finish 128 billion instructions at time Sat Aug 20 08:00:31 2022
+
+ToolComplete
+ pintool finish 129 billion instructions at time Sat Aug 20 08:02:52 2022
+
+ToolComplete
+ pintool finish 130 billion instructions at time Sat Aug 20 08:05:11 2022
+
+ToolComplete
+ pintool finish 131 billion instructions at time Sat Aug 20 08:07:33 2022
+
+ToolComplete
+ pintool finish 132 billion instructions at time Sat Aug 20 08:09:55 2022
+
+ToolComplete
+ pintool finish 133 billion instructions at time Sat Aug 20 08:12:15 2022
+
+ToolComplete
+ pintool finish 134 billion instructions at time Sat Aug 20 08:14:39 2022
+
+ToolComplete
+ pintool finish 135 billion instructions at time Sat Aug 20 08:17:04 2022
+
+ToolComplete
+ pintool finish 136 billion instructions at time Sat Aug 20 08:19:30 2022
+
+ToolComplete
+ pintool finish 137 billion instructions at time Sat Aug 20 08:21:55 2022
+
+ToolComplete
+ pintool finish 138 billion instructions at time Sat Aug 20 08:24:22 2022
+
+ToolComplete
+ pintool finish 139 billion instructions at time Sat Aug 20 08:26:52 2022
+
+ToolComplete
+ pintool finish 140 billion instructions at time Sat Aug 20 08:29:22 2022
+
+ToolComplete
+ pintool finish 141 billion instructions at time Sat Aug 20 08:31:50 2022
+
+ToolComplete
+ pintool finish 142 billion instructions at time Sat Aug 20 08:34:19 2022
+
+ToolComplete
+ pintool finish 143 billion instructions at time Sat Aug 20 08:36:49 2022
+
+ToolComplete
+ pintool finish 144 billion instructions at time Sat Aug 20 08:39:24 2022
+
+ToolComplete
+ pintool finish 145 billion instructions at time Sat Aug 20 08:41:58 2022
+
+ToolComplete
+ pintool finish 146 billion instructions at time Sat Aug 20 08:44:34 2022
+
+ToolComplete
+ pintool finish 147 billion instructions at time Sat Aug 20 08:47:11 2022
+
+ToolComplete
+ pintool finish 148 billion instructions at time Sat Aug 20 08:49:50 2022
+
+ToolComplete
+ pintool finish 149 billion instructions at time Sat Aug 20 08:52:27 2022
+
+ToolComplete
+ pintool finish 150 billion instructions at time Sat Aug 20 08:55:05 2022
+
+ToolComplete
+ pintool finish 151 billion instructions at time Sat Aug 20 08:57:49 2022
+
+ToolComplete
+ pintool finish 152 billion instructions at time Sat Aug 20 09:00:40 2022
+
+ToolComplete
+ pintool finish 153 billion instructions at time Sat Aug 20 09:03:37 2022
+
+ToolComplete
+ pintool finish 154 billion instructions at time Sat Aug 20 09:06:26 2022
+
+ToolComplete
+ pintool finish 155 billion instructions at time Sat Aug 20 09:08:56 2022
+
+ToolComplete
+ pintool finish 156 billion instructions at time Sat Aug 20 09:11:22 2022
+
+ToolComplete
+ pintool finish 157 billion instructions at time Sat Aug 20 09:13:47 2022
+
+ToolComplete
+ pintool finish 158 billion instructions at time Sat Aug 20 09:16:11 2022
+
+ToolComplete
+ pintool finish 159 billion instructions at time Sat Aug 20 09:18:36 2022
+
+ToolComplete
+ pintool finish 160 billion instructions at time Sat Aug 20 09:21:04 2022
+
+ToolComplete
+ pintool finish 161 billion instructions at time Sat Aug 20 09:23:33 2022
+
+ToolComplete
+ pintool finish 162 billion instructions at time Sat Aug 20 09:25:59 2022
+
+ToolComplete
+ pintool finish 163 billion instructions at time Sat Aug 20 09:28:28 2022
+
+ToolComplete
+ pintool finish 164 billion instructions at time Sat Aug 20 09:30:56 2022
+
+ToolComplete
+ pintool finish 165 billion instructions at time Sat Aug 20 09:33:21 2022
+
+ToolComplete
+ pintool finish 166 billion instructions at time Sat Aug 20 09:35:48 2022
+
+ToolComplete
+ pintool finish 167 billion instructions at time Sat Aug 20 09:38:18 2022
+
+ToolComplete
+ pintool finish 168 billion instructions at time Sat Aug 20 09:40:47 2022
+
+ToolComplete
+ pintool finish 169 billion instructions at time Sat Aug 20 09:43:20 2022
+
+ToolComplete
+ pintool finish 170 billion instructions at time Sat Aug 20 09:45:53 2022
+
+ToolComplete
+ pintool finish 171 billion instructions at time Sat Aug 20 09:48:28 2022
+
+ToolComplete
+ pintool finish 172 billion instructions at time Sat Aug 20 09:51:01 2022
+
+ToolComplete
+ pintool finish 173 billion instructions at time Sat Aug 20 09:53:36 2022
+
+ToolComplete
+ pintool finish 174 billion instructions at time Sat Aug 20 09:56:14 2022
+
+ToolComplete
+ pintool finish 175 billion instructions at time Sat Aug 20 09:58:54 2022
+
+ToolComplete
+ pintool finish 176 billion instructions at time Sat Aug 20 10:01:34 2022
+
+ToolComplete
+ pintool finish 177 billion instructions at time Sat Aug 20 10:04:14 2022
+
+ToolComplete
+ pintool finish 178 billion instructions at time Sat Aug 20 10:06:53 2022
+
+ToolComplete
+ pintool finish 179 billion instructions at time Sat Aug 20 10:09:31 2022
+
+ToolComplete
+ pintool finish 180 billion instructions at time Sat Aug 20 10:12:11 2022
+
+ToolComplete
+ pintool finish 181 billion instructions at time Sat Aug 20 10:14:15 2022
+
+ToolComplete
+ pintool finish 182 billion instructions at time Sat Aug 20 10:16:01 2022
+
+ToolComplete
+ pintool finish 183 billion instructions at time Sat Aug 20 10:17:44 2022
+
+ToolComplete
+ pintool finish 184 billion instructions at time Sat Aug 20 10:19:50 2022
+
+ToolComplete
+ pintool finish 185 billion instructions at time Sat Aug 20 10:21:38 2022
+
+ToolComplete
+ pintool finish 186 billion instructions at time Sat Aug 20 10:23:03 2022
+
+ToolComplete
+ pintool finish 187 billion instructions at time Sat Aug 20 10:24:37 2022
+
+ToolComplete
+ pintool finish 188 billion instructions at time Sat Aug 20 10:26:25 2022
+
+ToolComplete
+ pintool finish 189 billion instructions at time Sat Aug 20 10:27:50 2022
+
+ToolComplete
+ pintool finish 190 billion instructions at time Sat Aug 20 10:29:32 2022
+
+ToolComplete
+ pintool finish 191 billion instructions at time Sat Aug 20 10:31:24 2022
+
+ToolComplete
+ pintool finish 192 billion instructions at time Sat Aug 20 10:33:05 2022
+
+ToolComplete
+ pintool finish 193 billion instructions at time Sat Aug 20 10:34:39 2022
+
+ToolComplete
+ pintool finish 194 billion instructions at time Sat Aug 20 10:36:12 2022
+
+ToolComplete
+ pintool finish 195 billion instructions at time Sat Aug 20 10:37:40 2022
+
+ToolComplete
+ pintool finish 196 billion instructions at time Sat Aug 20 10:39:15 2022
+
+ToolComplete
+ pintool finish 197 billion instructions at time Sat Aug 20 10:40:45 2022
+
+ToolComplete
+ pintool finish 198 billion instructions at time Sat Aug 20 10:42:22 2022
+
+ToolComplete
+ pintool finish 199 billion instructions at time Sat Aug 20 10:44:40 2022
+
+ToolComplete
+ pintool finish 200 billion instructions at time Sat Aug 20 10:47:25 2022
+
+ToolComplete
+ pintool finish 201 billion instructions at time Sat Aug 20 10:49:43 2022
+
+ToolComplete
+ pintool finish 202 billion instructions at time Sat Aug 20 10:52:02 2022
+
+ToolComplete
+ pintool finish 203 billion instructions at time Sat Aug 20 10:54:23 2022
+
+ToolComplete
+ pintool finish 204 billion instructions at time Sat Aug 20 10:56:45 2022
+
+ToolComplete
+ pintool finish 205 billion instructions at time Sat Aug 20 10:59:12 2022
+
+ToolComplete
+ pintool finish 206 billion instructions at time Sat Aug 20 11:01:39 2022
+
+ToolComplete
+ pintool finish 207 billion instructions at time Sat Aug 20 11:04:03 2022
+
+ToolComplete
+ pintool finish 208 billion instructions at time Sat Aug 20 11:06:25 2022
+
+ToolComplete
+ pintool finish 209 billion instructions at time Sat Aug 20 11:08:48 2022
+
+ToolComplete
+ pintool finish 210 billion instructions at time Sat Aug 20 11:11:13 2022
+
+ToolComplete
+ pintool finish 211 billion instructions at time Sat Aug 20 11:13:38 2022
+
+ToolComplete
+ pintool finish 212 billion instructions at time Sat Aug 20 11:16:05 2022
+
+ToolComplete
+ pintool finish 213 billion instructions at time Sat Aug 20 11:18:31 2022
+
+ToolComplete
+ pintool finish 214 billion instructions at time Sat Aug 20 11:20:59 2022
+
+ToolComplete
+ pintool finish 215 billion instructions at time Sat Aug 20 11:23:26 2022
+
+ToolComplete
+ pintool finish 216 billion instructions at time Sat Aug 20 11:25:54 2022
+
+ToolComplete
+ pintool finish 217 billion instructions at time Sat Aug 20 11:28:20 2022
+
+ToolComplete
+ pintool finish 218 billion instructions at time Sat Aug 20 11:30:39 2022
+
+ToolComplete
+ pintool finish 219 billion instructions at time Sat Aug 20 11:32:53 2022
+
+ToolComplete
+ pintool finish 220 billion instructions at time Sat Aug 20 11:35:06 2022
+
+ToolComplete
+ pintool finish 221 billion instructions at time Sat Aug 20 11:37:16 2022
+
+ToolComplete
+ pintool finish 222 billion instructions at time Sat Aug 20 11:39:23 2022
+
+ToolComplete
+ pintool finish 223 billion instructions at time Sat Aug 20 11:41:38 2022
+
+ToolComplete
+ pintool finish 224 billion instructions at time Sat Aug 20 11:43:57 2022
+
+ToolComplete
+ pintool finish 225 billion instructions at time Sat Aug 20 11:46:10 2022
+
+ToolComplete
+ pintool finish 226 billion instructions at time Sat Aug 20 11:48:29 2022
+
+ToolComplete
+ pintool finish 227 billion instructions at time Sat Aug 20 11:51:08 2022
+
+ToolComplete
+ pintool finish 228 billion instructions at time Sat Aug 20 11:53:48 2022
+
+ToolComplete
+ pintool finish 229 billion instructions at time Sat Aug 20 11:56:17 2022
+
+ToolComplete
+ pintool finish 230 billion instructions at time Sat Aug 20 11:58:13 2022
+
+ToolComplete
+ pintool finish 231 billion instructions at time Sat Aug 20 11:59:51 2022
+
+ToolComplete
+ pintool finish 232 billion instructions at time Sat Aug 20 12:01:43 2022
+
+ToolComplete
+ pintool finish 233 billion instructions at time Sat Aug 20 12:03:49 2022
+
+ToolComplete
+ pintool finish 234 billion instructions at time Sat Aug 20 12:05:04 2022
+
+ToolComplete
+ pintool finish 235 billion instructions at time Sat Aug 20 12:06:18 2022
+
+ToolComplete
+ pintool finish 236 billion instructions at time Sat Aug 20 12:07:38 2022
+
+ToolComplete
+ pintool finish 237 billion instructions at time Sat Aug 20 12:08:59 2022
+
+ToolComplete
+ pintool finish 238 billion instructions at time Sat Aug 20 12:10:50 2022
+
+ToolComplete
+ pintool finish 239 billion instructions at time Sat Aug 20 12:12:33 2022
+
+ToolComplete
+ pintool finish 240 billion instructions at time Sat Aug 20 12:14:19 2022
+
+ToolComplete
+ pintool finish 241 billion instructions at time Sat Aug 20 12:15:52 2022
+
+ToolComplete
+ pintool finish 242 billion instructions at time Sat Aug 20 12:17:20 2022
+
+ToolComplete
+ pintool finish 243 billion instructions at time Sat Aug 20 12:18:42 2022
+
+ToolComplete
+ pintool finish 244 billion instructions at time Sat Aug 20 12:19:59 2022
+
+ToolComplete
+ pintool finish 245 billion instructions at time Sat Aug 20 12:21:16 2022
+
+ToolComplete
+ pintool finish 246 billion instructions at time Sat Aug 20 12:22:33 2022
+
+ToolComplete
+ pintool finish 247 billion instructions at time Sat Aug 20 12:23:54 2022
+
+ToolComplete
+ pintool finish 248 billion instructions at time Sat Aug 20 12:25:24 2022
+
+ToolComplete
+ pintool finish 249 billion instructions at time Sat Aug 20 12:27:38 2022
+
+ToolComplete
+ pintool finish 250 billion instructions at time Sat Aug 20 12:29:40 2022
+
+ToolComplete
+ pintool finish 251 billion instructions at time Sat Aug 20 12:31:48 2022
+
+ToolComplete
+ pintool finish 252 billion instructions at time Sat Aug 20 12:34:11 2022
+
+ToolComplete
+ pintool finish 253 billion instructions at time Sat Aug 20 12:36:36 2022
+
+ToolComplete
+ pintool finish 254 billion instructions at time Sat Aug 20 12:39:13 2022
+
+ToolComplete
+ pintool finish 255 billion instructions at time Sat Aug 20 12:41:51 2022
+
+ToolComplete
+ pintool finish 256 billion instructions at time Sat Aug 20 12:44:28 2022
+
+ToolComplete
+ pintool finish 257 billion instructions at time Sat Aug 20 12:47:09 2022
+
+ToolComplete
+ pintool finish 258 billion instructions at time Sat Aug 20 12:49:53 2022
+
+ToolComplete
+ pintool finish 259 billion instructions at time Sat Aug 20 12:52:40 2022
+
+ToolComplete
+ pintool finish 260 billion instructions at time Sat Aug 20 12:55:28 2022
+
+ToolComplete
+ pintool finish 261 billion instructions at time Sat Aug 20 12:58:17 2022
+
+ToolComplete
+ pintool finish 262 billion instructions at time Sat Aug 20 13:01:07 2022
+
+ToolComplete
+ pintool finish 263 billion instructions at time Sat Aug 20 13:03:45 2022
+
+ToolComplete
+ pintool finish 264 billion instructions at time Sat Aug 20 13:06:21 2022
+
+ToolComplete
+ pintool finish 265 billion instructions at time Sat Aug 20 13:09:03 2022
+
+ToolComplete
+ pintool finish 266 billion instructions at time Sat Aug 20 13:11:20 2022
+
+ToolComplete
+ pintool finish 267 billion instructions at time Sat Aug 20 13:13:32 2022
+
+ToolComplete
+ pintool finish 268 billion instructions at time Sat Aug 20 13:15:47 2022
+
+ToolComplete
+ pintool finish 269 billion instructions at time Sat Aug 20 13:17:58 2022
+
+ToolComplete
+ pintool finish 270 billion instructions at time Sat Aug 20 13:20:22 2022
+
+ToolComplete
+ pintool finish 271 billion instructions at time Sat Aug 20 13:23:06 2022
+
+ToolComplete
+ pintool finish 272 billion instructions at time Sat Aug 20 13:25:51 2022
+
+ToolComplete
+ pintool finish 273 billion instructions at time Sat Aug 20 13:28:39 2022
+
+ToolComplete
+ pintool finish 274 billion instructions at time Sat Aug 20 13:31:26 2022
+
+ToolComplete
+ pintool finish 275 billion instructions at time Sat Aug 20 13:34:25 2022
+
+ToolComplete
+ pintool finish 276 billion instructions at time Sat Aug 20 13:37:26 2022
+
+ToolComplete
+ pintool finish 277 billion instructions at time Sat Aug 20 13:40:33 2022
+
+ToolComplete
+ pintool finish 278 billion instructions at time Sat Aug 20 13:43:39 2022
+
+ToolComplete
+ pintool finish 279 billion instructions at time Sat Aug 20 13:46:46 2022
+
+ToolComplete
+ pintool finish 280 billion instructions at time Sat Aug 20 13:49:21 2022
+
+ToolComplete
+ pintool finish 281 billion instructions at time Sat Aug 20 13:51:29 2022
+
+ToolComplete
+ pintool finish 282 billion instructions at time Sat Aug 20 13:53:23 2022
+
+ToolComplete
+ pintool finish 283 billion instructions at time Sat Aug 20 13:55:35 2022
+
+ToolComplete
+ pintool finish 284 billion instructions at time Sat Aug 20 13:58:23 2022
+
+ToolComplete
+ pintool finish 285 billion instructions at time Sat Aug 20 14:01:20 2022
+
+ToolComplete
+ pintool finish 286 billion instructions at time Sat Aug 20 14:03:01 2022
+
+ToolComplete
+ pintool finish 287 billion instructions at time Sat Aug 20 14:04:37 2022
+
+ToolComplete
+ pintool finish 288 billion instructions at time Sat Aug 20 14:06:16 2022
+
+ToolComplete
+ pintool finish 289 billion instructions at time Sat Aug 20 14:07:48 2022
+
+ToolComplete
+ pintool finish 290 billion instructions at time Sat Aug 20 14:10:17 2022
+
+ToolComplete
+ pintool finish 291 billion instructions at time Sat Aug 20 14:12:28 2022
+
+ToolComplete
+ pintool finish 292 billion instructions at time Sat Aug 20 14:14:48 2022
+
+ToolComplete
+ pintool finish 293 billion instructions at time Sat Aug 20 14:17:11 2022
+
+ToolComplete
+ pintool finish 294 billion instructions at time Sat Aug 20 14:19:35 2022
+
+ToolComplete
+ pintool finish 295 billion instructions at time Sat Aug 20 14:22:00 2022
+
+ToolComplete
+ pintool finish 296 billion instructions at time Sat Aug 20 14:24:27 2022
+
+ToolComplete
+ pintool finish 297 billion instructions at time Sat Aug 20 14:26:54 2022
+
+ToolComplete
+ pintool finish 298 billion instructions at time Sat Aug 20 14:29:08 2022
+
+ToolComplete
+ pintool finish 299 billion instructions at time Sat Aug 20 14:31:23 2022
+
+ToolComplete
+ pintool finish 300 billion instructions at time Sat Aug 20 14:33:44 2022
+
+ToolComplete
+ pintool finish 301 billion instructions at time Sat Aug 20 14:36:20 2022
+
+ToolComplete
+ pintool finish 302 billion instructions at time Sat Aug 20 14:38:53 2022
+
+ToolComplete
+ pintool finish 303 billion instructions at time Sat Aug 20 14:41:26 2022
+
+ToolComplete
+ pintool finish 304 billion instructions at time Sat Aug 20 14:43:58 2022
+
+ToolComplete
+ pintool finish 305 billion instructions at time Sat Aug 20 14:45:51 2022
+
+ToolComplete
+ pintool finish 306 billion instructions at time Sat Aug 20 14:47:34 2022
+
+ToolComplete
+
+MCF SPEC CPU2006 version 1.10
+Copyright (c) 1998-2000 Zuse Institut Berlin (ZIB)
+Copyright (c) 2000-2002 Andreas Loebel & ZIB
+Copyright (c) 2003-2005 Andreas Loebel
+
+nodes                      : 25137
+active arcs                : 260767
+simplex iterations         : 226605
+objective value            : 15887540369
+new implicit arcs          : 27067745
+active arcs                : 27328512
+simplex iterations         : 2591718
+objective value            : 12129093300
+erased arcs                : 27045002
+new implicit arcs          : 27045002
+active arcs                : 27328512
+simplex iterations         : 4853421
+objective value            : 11109478016
+erased arcs                : 27032013
+new implicit arcs          : 27032013
+active arcs                : 27328512
+simplex iterations         : 6008461
+objective value            : 11006050760
+erased arcs                : 27028145
+new implicit arcs          : 27028145
+active arcs                : 27328512
+simplex iterations         : 6751264
+objective value            : 10912231340
+erased arcs                : 27022372
+new implicit arcs          : 27022372
+active arcs                : 27328512
+simplex iterations         : 7224533
+objective value            : 10860742840
+checksum                   : 900463229
+done
+ToolComplete

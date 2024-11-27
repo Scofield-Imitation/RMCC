@@ -1,0 +1,16 @@
+
+
+
+export OMP_NUM_THREADS=1
+
+num_pintool_jobs=100
+while [ 20  -le $num_pintool_jobs  ]
+do
+	num_pintool_jobs=$(ps aux | grep  run_base | wc -l)
+done
+cd /mnt/xinw/temp_run_pintool/CPU2006/429.mcf/run/run_base_ref_gcc43-64bit.0000
+
+LD_PRELOAD=libhugetlbfs.so HUGETLB_MORECORE=yes    setarch $(uname -m) -R /mnt/xinw/temp_run_pintool/pin-3.6-97554-g31f0a167d-gcc-linux/pin -t /mnt/xinw/temp_run_pintool/pinatrace_with_recent_aes_fix_checkpointing_with_caching_metadata_in_LLC_and_caching_inst_page_table_eccm_basic_and_opt_8MB_LLC_128KB_memoize_both_L0_and_L1_counters_real_benchmarks_reasonable_initialization_group_size_16_recent_aes_spec_and_parsec.so -output_dir /mnt/xinw/temp_run_pintool/pintool_8_20_baseline_spec_and_parsec/0/1/0/0/0.02/0/1000000/0/0.02/0/0/0/0/500000000000/1/1/0/0/0.1/0/0/1/0/1/0.05/429.mcf -f 0 -tree_cpt /mnt/xinw/temp_run_pintool/long_part_fix_index_33_0_random_whole_tree_baseline_tree_nodes.cpt -random_cpt /mnt/xinw/temp_run_pintool/random_numbers_512k.cpt -table_cpt /mnt/xinw/temp_run_pintool/long_part_fix_index_33_0_random_whole_tree_baseline_aes_table.cpt -access_inst_and_page_table 1 -aes_epoch 1000000 -dccm_overhead 1 -deprioritize_tree_nodes_in_metadata_cache 0 -far_relevel 0 -generate_tree_nodes 0 -high_wc_ratio_threshold 0.02 -huge_page 1 -insert_metadata_into_llc 0 -invalidate_dirty_version_in_metadata_cache 1 -is_gap 0 -mcr_overflow 0   -possibility_for_updating_l1_while_read 0.05 -possibility_overflow_relevel 0.1 -predictive_decryption 0 -rand_init 0 -record_recent_aes 1 -relevel_to_next_group 0 -remain_budget_limit_for_page_level_relevel 0 -reset_table_stats_per_epoch 0 -run_insts 500000000000 -threshold_insertion_of_evicted_group 0.02 -time_disable_page_level_relevel_with_overhead 0 -use_page_zero 0 -use_sampling_for_inserting_metadata_into_llc 0  -cacheline_offset 0  --  ../run_base_ref_gcc43-64bit.0000/mcf_base.gcc43-64bit inp.in > inp.out 2>> inp.err  > /mnt/xinw/temp_run_pintool/pintool_8_20_baseline_spec_and_parsec/0/1/0/0/0.02/0/1000000/0/0.02/0/0/0/0/500000000000/1/1/0/0/0.1/0/0/1/0/1/0.05/429.mcf/end & 
+
+echo "429.mcf"
+echo "Job Ended at: `date`"
