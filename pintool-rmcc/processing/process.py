@@ -122,6 +122,28 @@ class Stat:
 	    self.statVec = [['TotalMemFetches:'],['TotalOverflowFetches:']]
  	elif self.stat == 'pintool_aes_table_hit_rate' or self.stat == 'pintool_aes_l1_hit_rate':
 	    self.statVec = [['OTP_TABLE_Hits:'],['OTP_TABLE_Misses:']]
+	elif self.stat == 'pintool_metadata_miss_rate_for_memory_reads_0':
+	    self.statVec = [['TotalMemFetches:'],['TotalMemWriteBacks:'],['TotalBlockLevelReleveling:'],['VersionCountersAccessesInLLCDueToRead:']]
+	elif self.stat == 'pintool_metadata_miss_rate_for_memory_reads_1':
+	    self.statVec = [['TotalMemFetches:'],['TotalMemWriteBacks:'],['TotalBlockLevelReleveling:'],['L1CountersAccessesInLLCDueToRead:']]
+	elif self.stat == 'pintool_metadata_miss_rate_for_memory_reads_2':
+	    self.statVec = [['TotalMemFetches:'],['TotalMemWriteBacks:'],['TotalBlockLevelReleveling:'],['L2CountersAccessesInLLCDueToRead:']]
+	elif self.stat == 'pintool_metadata_miss_rate_for_memory_writes_0':
+	    self.statVec = [['TotalMemFetches:'],['TotalMemWriteBacks:'],['TotalBlockLevelReleveling:'],['VersionCountersAccessesInLLCDueToWrite:']]
+	elif self.stat == 'pintool_metadata_miss_rate_for_memory_writes_1':
+	    self.statVec = [['TotalMemFetches:'],['TotalMemWriteBacks:'],['TotalBlockLevelReleveling:'],['L1CountersAccessesInLLCDueToWrite:']]
+	elif self.stat == 'pintool_metadata_miss_rate_for_memory_writes_2':
+	    self.statVec = [['TotalMemFetches:'],['TotalMemWriteBacks:'],['TotalBlockLevelReleveling:'],['L2CountersAccessesInLLCDueToWrite:']]
+	elif self.stat == 'pintool_overflow_events_normalized_to_data_traffic_0':
+	    self.statVec = [['TotalMemFetches:'],['TotalMemWriteBacks:'],['TotalBlockLevelReleveling:'],['TotalOverflowFetchesLevel0:']]
+	elif self.stat == 'pintool_overflow_events_normalized_to_data_traffic_1':
+	    self.statVec = [['TotalMemFetches:'],['TotalMemWriteBacks:'],['TotalBlockLevelReleveling:'],['TotalOverflowFetchesLevel1:']]
+	elif self.stat == 'pintool_overflow_events_normalized_to_data_traffic_2':
+	    self.statVec = [['TotalMemFetches:'],['TotalMemWriteBacks:'],['TotalBlockLevelReleveling:'],['TotalOverflowFetchesLevel2:']]
+	elif self.stat == 'pintool_overflow_events_normalized_to_data_traffic_3':
+	    self.statVec = [['TotalMemFetches:'],['TotalMemWriteBacks:'],['TotalBlockLevelReleveling:'],['TotalOverflowFetchesLevel3:']]
+	elif self.stat == 'pintool_evicted_metadata_traffic_normalized_to_data_traffic':
+	    self.statVec = [['TotalMemFetches:'],['TotalMemWriteBacks:'],['TotalBlockLevelReleveling:'],['L2MetadataWritebacks:']]
 	elif self.stat == 'otp_table_hit_rate_under_counter_miss':
 	    self.statVec = [['OTP_TABLE_Hits_While_Wc_Cache_Misses:'],['OTP_TABLE_Misses_While_Wc_Cache_Misses:']]
         elif self.stat == 'normalzied_TotalMemWriteBacks':
@@ -232,6 +254,10 @@ class Stat:
        	    return np.sum(self.np_statVec[1])*1.0/np.sum(self.np_statVec[0])
 	elif self.stat == 'pintool_aes_table_hit_rate' or self.stat == 'pintool_aes_l1_hit_rate' or self.stat == 'otp_table_hit_rate_under_counter_miss':
 	    return np.sum(self.np_statVec[0])*1.0/(np.sum(self.np_statVec[0])+np.sum(self.np_statVec[1]))
+	elif self.stat == 'pintool_metadata_miss_rate_for_memory_reads_0' or self.stat == 'pintool_metadata_miss_rate_for_memory_reads_1' or self.stat == 'pintool_metadata_miss_rate_for_memory_reads_2' or  self.stat == 'pintool_metadata_miss_rate_for_memory_writes_0' or self.stat == 'pintool_metadata_miss_rate_for_memory_writes_1' or self.stat == 'pintool_metadata_miss_rate_for_memory_writes_2' or self.stat == 'pintool_evicted_metadata_traffic_normalized_to_data_traffic':
+	    return np.sum(self.np_statVec[3])*1.0/(np.sum(self.np_statVec[0])+np.sum(self.np_statVec[1])-np.sum(self.np_statVec[2]))
+	elif self.stat == 'pintool_overflow_events_normalized_to_data_traffic_0' or self.stat == 'pintool_overflow_events_normalized_to_data_traffic_1' or self.stat == 'pintool_overflow_events_normalized_to_data_traffic_2' or self.stat == 'pintool_overflow_events_normalized_to_data_traffic_3':
+	    return np.sum(self.np_statVec[3])*1.0/(256.0*(np.sum(self.np_statVec[0])+np.sum(self.np_statVec[1])-np.sum(self.np_statVec[2])))
 	elif self.stat == 'page_l1_miss_ratio' or self.stat == 'page_l2_miss_ratio':
 	    return (np.sum(self.np_statVec[4])+np.sum(self.np_statVec[5])+np.sum(self.np_statVec[6])+np.sum(self.np_statVec[7]))*1.0/(np.sum(self.np_statVec[0])+np.sum(self.np_statVec[1])-np.sum(self.np_statVec[2])-np.sum(self.np_statVec[3]))
 	elif 'Frequency' in self.stat:
@@ -449,7 +475,7 @@ if __name__ == "__main__":
     #print dirs
     # create all dictionaries
 
-    float_formatter = lambda x: "%.4f" % x
+    float_formatter = lambda x: "%.6f" % x
     all_stats_dict = {}
     for d in dirs:
         for benchmark in benchmarks:

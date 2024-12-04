@@ -188,7 +188,7 @@ static const INT32 L1_counter_SET_SIZE = 8; // Set size (number of cache lines i
 //static const INT32 L2_SET_NUM = 256;
 //static const INT32 L2_SET_NUM = 8;
 //static const INT32 L2_SET_NUM = 8;
-static const INT32 L2_SET_NUM = 8192;
+static const INT32 L2_SET_NUM = 2048;
 //static const INT32 L2_SET_NUM = 128;
 //xinw modified L2 size to 2MB
 //xinw modified L2 size to 256KB
@@ -211,7 +211,7 @@ static const UINT32 PC_SAMPLING_SIZE = 8;
 // WC cache parameters: total size = 128kB
 //xinw modified the WCCACHE size to 32KB-begin
 //static const INT32 WCCACHE_SET_NUM = 128;
-static const INT32 WCCACHE_SET_NUM = 128;
+static const INT32 WCCACHE_SET_NUM = 16;
 //static const INT32 WCCACHE_SET_NUM = 1;
 //static const INT32 WCCACHE_SET_NUM = 4;
 //static const INT32 WCCACHE_SET_NUM = 2;

@@ -134,7 +134,7 @@ int deviation=0;
 //#define OTP_PRECALCULATION 0
 int deprioritize_tree_nodes_in_metadata_cache=0;
 int insert_metadata_into_LLC=0;
-int access_inst_and_page_table=0;
+int access_inst_and_page_table=1;
 #define page_table_begin_addr (0xF000000000000000)
 UINT64 get_inst_block_address(UINT64 _program_counter){
 	return _program_counter&0xFFFFFFFFFFFFFFC0;
@@ -146,11 +146,11 @@ int use_sampling_for_inserting_metadata_into_LLC=0;
 int use_drrip=0;
 int delay_high_level_tree_node_overflow=0;
 int dccm_block_level_relevel=0;
-int huge_page=0;
+int huge_page=1;
 int during_write=1;
 int is_gap=0;
 int mcr_overflow=0;
-int invalidate_dirty_version_in_metadata_cache=0;
+int invalidate_dirty_version_in_metadata_cache=1;
 int far_relevel=0;
 int use_page_zero=0;
 int generate_tree_nodes=0;
@@ -574,11 +574,11 @@ ofstream output_file_otp;
 KNOB<double> KnobPossibilityForUpdatingL1WhileRead(KNOB_MODE_WRITEONCE, "pintool",
   "possibility_for_updating_l1_while_read", "0", "specify possibility for updating L1 counter while read");
 KNOB<int> KnobInvalidateDirtyVersionInMetadataCache(KNOB_MODE_WRITEONCE, "pintool",
-  "invalidate_dirty_version_in_metadata_cache", "0", "identify whether to invalidate dirty version metadata cache during data writeback");
+  "invalidate_dirty_version_in_metadata_cache", "1", "identify whether to invalidate dirty version metadata cache during data writeback");
 KNOB<int> KnobDeprioritizeTreeNodesInMetadataCache(KNOB_MODE_WRITEONCE, "pintool",
   "deprioritize_tree_nodes_in_metadata_cache", "0", "identify whether to deprioritize integrity tree nodes in metadata cache");
 KNOB<int> KnobAccessInstAndPageTable(KNOB_MODE_WRITEONCE, "pintool",
-  "access_inst_and_page_table", "0", "identify whether to access inst and page table entry");
+  "access_inst_and_page_table", "1", "identify whether to access inst and page table entry");
 KNOB<int> KnobInsertMetadataIntoLLC(KNOB_MODE_WRITEONCE, "pintool",
   "insert_metadata_into_llc", "0", "identify whether to insert metadata blocks to LLC from private metadata cache");
 KNOB<int> KnobUseSamplingForInsertingMetadataIntoLLC(KNOB_MODE_WRITEONCE, "pintool",
@@ -612,7 +612,7 @@ KNOB<int> KnobAesEpoch(KNOB_MODE_WRITEONCE, "pintool",
 KNOB<int> KnobResetTableStatsPerEpoch(KNOB_MODE_WRITEONCE, "pintool",
   "reset_table_stats_per_epoch", "0", "identify whether it is resetting table stats in the end of each epoch");
 KNOB<double> KnobThresholdForInsertionOfEvictedGroupOverhead(KNOB_MODE_WRITEONCE, "pintool",
-  "threshold_insertion_of_evicted_group", "0", "specify threshold for hit rate of evicted group to insert into the table");
+  "threshold_insertion_of_evicted_group", "0.02", "specify threshold for hit rate of evicted group to insert into the table");
 
 KNOB<string> KnobOutputDir(KNOB_MODE_WRITEONCE, "pintool",
   "output_dir", "output_dir", "specify stats file directory");
@@ -627,7 +627,7 @@ KNOB<double> KnobRandomInit(KNOB_MODE_WRITEONCE, "pintool",
 KNOB<int> KnobMcrOverflow(KNOB_MODE_WRITEONCE, "pintool",
   "mcr_overflow", "0", "option to turn/off mcr_overflow");
 KNOB<int> KnobHugePage(KNOB_MODE_WRITEONCE, "pintool",
-  "huge_page", "0", "option to turn/off huge page");
+  "huge_page", "1", "option to turn/off huge page");
 KNOB<int> KnobIsGap(KNOB_MODE_WRITEONCE, "pintool",
   "is_gap", "0", "identify whether it is running for GAP or microbenchmarks");
 KNOB<int> KnobFarRelevel(KNOB_MODE_WRITEONCE, "pintool",
@@ -645,11 +645,11 @@ KNOB<int> KnobCachelineOffset(KNOB_MODE_WRITEONCE, "pintool",
 KNOB<double> KnobSkipGapInit(KNOB_MODE_WRITEONCE, "pintool",
   "skip_gap_init", "480000000", "specify gap fast forward value");
 KNOB<double> KnobPossibilityOverflowRelevel(KNOB_MODE_WRITEONCE, "pintool",
-  "possibility_overflow_relevel", "1", "specify possibility of dccm releveling with overflow overhead");
+  "possibility_overflow_relevel", "0.1", "specify possibility of dccm releveling with overflow overhead");
 KNOB<double> KnobTimeDisablePageLevelRelevelWithOverhead(KNOB_MODE_WRITEONCE, "pintool",
-  "time_disable_page_level_relevel_with_overhead", "0.5", "specify time length when  page level releveling with overhead is cancelled normalized to epoch size");
+  "time_disable_page_level_relevel_with_overhead", "0", "specify time length when  page level releveling with overhead is cancelled normalized to epoch size");
 KNOB<double> KnobHighWcRatioThreshold(KNOB_MODE_WRITEONCE, "pintool",
-  "high_wc_ratio_threshold", "1", "specify possibility of dccm releveling with overflow overhead");
+  "high_wc_ratio_threshold", "0.02", "specify possibility of dccm releveling with overflow overhead");
 KNOB<int> KnobDelayHighLevelTreeNodeOverflow(KNOB_MODE_WRITEONCE, "pintool",
   "delay_high_level_tree_node_overflow", "0", "option to turn/off delay_high_level_tree_node_overflow");
 // Fast randomization algorithm (used instead of rand()). Used in DIP/DRRIP for probability of long vs distant insertion 
@@ -1496,7 +1496,7 @@ UINT64 otp_table_hit_while_wc_cache_miss_stats=0;
 UINT64 otp_table_miss_while_wc_cache_miss_stats=0;
 //xinw added for average difference between groups
 double otp_average_distance;
-double time_disable_page_level_relevel_with_overhead=0.5;
+double time_disable_page_level_relevel_with_overhead=0;
 //double HIGH_WC_RATIO_THRESHOLD=0.05;
 double HIGH_WC_RATIO_THRESHOLD=0.02;
 //#define HIGH_WC_RATIO_THRESHOLD 0.1
